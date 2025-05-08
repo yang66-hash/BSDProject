@@ -2,11 +2,6 @@ server:
   port: 8090
 
 spring:
-  datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://127.0.0.1:3306/data_collector_db?autoReconnect=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
-    driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
       host: 127.0.0.1

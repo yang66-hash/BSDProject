@@ -1,7 +1,6 @@
 package com.yang.apm.springplugin.utils;
 
 
-import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMGCInfo;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMMemInfo;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMSummaryInfo;

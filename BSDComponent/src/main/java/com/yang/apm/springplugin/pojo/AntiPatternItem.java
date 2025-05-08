@@ -1,4 +1,4 @@
-package com.yang.apm.springplugin.base.item;
+package com.yang.apm.springplugin.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;

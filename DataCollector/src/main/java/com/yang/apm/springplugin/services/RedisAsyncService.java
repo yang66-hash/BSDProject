@@ -8,19 +8,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.openid.connect.sdk.federation.policy.language.StringOperation;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-
-import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
-import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
-import com.yang.apm.springplugin.pojo.result.business.BusinessMetricsRes;
-import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
-import com.yang.apm.springplugin.services.dynamicdetect.BusinessService;
-import com.yang.apm.springplugin.services.dynamicdetect.MetricsService;
-import com.yang.apm.springplugin.services.dynamicdetect.TraceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
@@ -30,7 +21,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;

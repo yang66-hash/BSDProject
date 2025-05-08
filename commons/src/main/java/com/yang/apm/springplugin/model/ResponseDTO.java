@@ -1,8 +1,8 @@
-package com.yang.model;
+package com.yang.apm.springplugin.model;
 
 
 
-import com.yang.enums.ResponseStatusEnum;
+import com.yang.apm.springplugin.base.Enum.ResponseStatusEnum;
 import lombok.Data;
 
 import java.io.Serializable;

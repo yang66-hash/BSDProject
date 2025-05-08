@@ -1,4 +1,4 @@
-package services.dynamicdetect;
+package com.yang.apm.springplugin.services.dynamicdetect;
 
 import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.pojo.result.business.BusinessMetricsRes;

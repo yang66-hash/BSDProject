@@ -15,11 +15,6 @@ public class DataCollectorEventPublisher {
         this.publisher = publisher;
     }
 
-    public void publishRemoteRepositoryChangeEvent(){
-        RemoteRepositoryChangeEvent remoteRepositoryChangeEvent = new RemoteRepositoryChangeEvent(this);
-        log.info("publish remote repository change event ...");
-        publisher.publishEvent(remoteRepositoryChangeEvent);
-    }
 
     public void publishElasticsearchSettingsChangeEvent(){
         ElasticsearchSettingsChangeEvent elasticsearchSettingsChangeEvent = new ElasticsearchSettingsChangeEvent(this);

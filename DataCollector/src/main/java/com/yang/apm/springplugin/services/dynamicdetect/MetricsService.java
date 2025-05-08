@@ -3,13 +3,11 @@ package com.yang.apm.springplugin.services.dynamicdetect;
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
-import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.expection.ServiceException;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMGCInfo;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMMemInfo;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMSummaryInfo;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
-import com.yang.apm.springplugin.services.RedisAsyncService;
 import com.yang.apm.springplugin.utils.APPMetricsUtil;
 import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
 import com.yang.apm.springplugin.utils.TimeUtil;
@@ -19,7 +17,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @Slf4j

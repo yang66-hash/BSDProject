@@ -15,11 +15,12 @@ import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.yang.apm.springplugin.base.Enum.DetectableBS;
 import com.yang.apm.springplugin.base.context.staticres.CyclicReferenceContext;
-import com.yang.apm.springplugin.base.item.AntiPatternItem;
+import com.yang.apm.springplugin.pojo.AntiPatternItem;
+import com.yang.apm.springplugin.pojo.PathMappingServiceItem;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.factory.FileFactory;
-import com.yang.apm.springplugin.pojo.codemapping.PathMappingServiceItem;
+import com.yang.apm.springplugin.pojo.PathMappingServiceItem;
 import com.yang.apm.springplugin.services.IDetectConvert;
 import com.yang.apm.springplugin.services.db.AntiPatternItemService;
 import com.yang.apm.springplugin.services.db.PathMappingService;
@@ -30,7 +31,10 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -142,7 +146,6 @@ public class CyclicReferenceService implements IDetectConvert {
     }
 
     public DetectionResItem getCyclicReference(RequestItem request) {
-
         try{
             QueryWrapper<AntiPatternItem> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("name", DetectableBS.CYCLIC_REFERENCES.getValue());

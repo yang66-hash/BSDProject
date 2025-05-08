@@ -1,4 +1,4 @@
-package services.redis;
+package com.yang.apm.springplugin.services.redis;
 
 import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
