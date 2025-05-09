@@ -22,4 +22,11 @@ public class CacheConfig {
                 .build();
     }
 
+    @Bean
+    public Cache<String, Integer> integerCache() {
+        return CacheBuilder.newBuilder()
+                .maximumSize(1_000)
+                .build();
+    }
+
 }
