@@ -3,7 +3,7 @@ package com.yang.apm.springplugin.controller.staticanalysis;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.services.RedisAsyncService;
+import com.yang.apm.springplugin.services.DetectionItemBufferService;
 import com.yang.apm.springplugin.services.staticdetect.UnVersionedApiService;
 import com.yang.model.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class InternalDesignController {
 
     @Autowired
-    private RedisAsyncService redisAsyncService;
+    private DetectionItemBufferService detectionItemBufferService;
 
 
     @Autowired
@@ -32,7 +32,7 @@ public class InternalDesignController {
     public ResponseDTO<String> unVersionedApis(@RequestBody RequestItem requestItem){
         log.info("No api version detection for "+ requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = unVersionedApiService.getUnVersionedApis(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 

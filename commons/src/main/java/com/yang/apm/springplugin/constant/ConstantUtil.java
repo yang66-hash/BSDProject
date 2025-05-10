@@ -15,9 +15,11 @@ public class ConstantUtil {
     public static final String INTERVAL_OF_DYNAMIC_KEY = "bsd_dynamic_interval";
     public static final String TIME_WINDOW_OF_DYNAMIC_KEY = "bsd_dynamic_time_window";
     public static final String INCREMENT_WINDOW_OF_DYNAMIC_KEY = "bsd_dynamic_cur_window";
+    public static final String BSD_INTEGER_CACHE_NAME = "integerCache";
 
 
-    public static final String LANGUAGE = "Java";
+    //用于数据external metrics的存储分为windows 和 interval 两部分数据
+    public static final String METRICS_EXTERNAL_INDEX_PREFIX = "bsd.analysis.metrics.external";
 
 //    //不同的JVM使用可能使用不同的垃圾回收器 同时不同JDK版本 默认的JVM GC也有所不同
 //    public final static String OLD_GENERATION = "Old Generation";

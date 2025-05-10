@@ -4,7 +4,7 @@ package com.yang.apm.springplugin.controller.staticanalysis;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.services.RedisAsyncService;
+import com.yang.apm.springplugin.services.DetectionItemBufferService;
 import com.yang.apm.springplugin.services.staticdetect.HardCodeService;
 import com.yang.model.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ public class InterComController {
     private HardCodeService hardCodeService;
 
     @Autowired
-    private RedisAsyncService redisAsyncService;
+    private DetectionItemBufferService detectionItemBufferService;
 
     /**
      * 传入的文件路径为单个微服务路径
@@ -39,7 +39,7 @@ public class InterComController {
     public ResponseDTO<String> hardCodeIPAndPort(@RequestBody RequestItem requestItem) throws IOException {
         log.info("Hard Code detection for "+ requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = hardCodeService.detectHardCode(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 

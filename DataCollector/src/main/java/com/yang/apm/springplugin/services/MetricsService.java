@@ -1,4 +1,4 @@
-package com.yang.apm.springplugin.services.dynamicdetect;
+package com.yang.apm.springplugin.services;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
@@ -13,7 +13,6 @@ import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
 import com.yang.apm.springplugin.utils.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -32,10 +31,6 @@ public class MetricsService {
 
     @Autowired
     private ElasticSearchQueryManager elasticSearchQueryManager;
-
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 用于获取指定微服务的指标数据,并将数据写入redis中，设置过期时间expiredTime为45s.

@@ -1,52 +1,177 @@
 package com.yang.apm.springplugin.services;
 
 import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
 public class CacheService {
 
-    private final Cache<String, SvcRes> cache;
+
+    //（假想1000实例）设计本地缓存 因为本地数据计算的并发最高不可能超过1000 times per minute
+    /**
+     * 三级结构：
+     *   dataType -->
+     *      serviceName_interval -->
+     *         Cache<podName, List<SvcRes>>   // 第三层用 Guava Cache，实现过期回收
+     */
 
     @Autowired
-    public CacheService(Cache<String, SvcRes> cache) {
-        this.cache = cache;
+    private PersistentIntegerCacheService persistentIntegerCacheService;
 
-    }
+    private final ConcurrentHashMap<
+            String,
+            ConcurrentHashMap<
+                    String,
+                    Cache<String, List<SvcRes>>>> svcCache = new ConcurrentHashMap<>();
 
-    public <T extends SvcRes> void saveT2Cache(List<T> svcResList, String resType, String collectTime) {
+//    private final HashSet<DetectionResItem>
+
+    //将缓存中的检测结果发送到ES中
+
+
+
+
+
+
+    public <T extends SvcRes> void saveT2Cache(List<T> svcResList, String resType) {
         if (svcResList == null || svcResList.isEmpty()) {
             return;
         }
-        String keyPrefix = resType + "|" + svcResList.get(0).getInterval();
-        //将数据转为Map<>
 
-        svcResList.forEach(sr->{
-            String key = keyPrefix
-                    + "|" + sr.getServiceName()
-                    + "|" + sr.getLanguage()
-                    + "|" + sr.getPodName()
-                    + "|" + collectTime;
-            cache.put(key, sr);
-            log.info("cached[{}] -> {}", key, sr);
-        });
+        //设置第一层的key
+        var byDataType = svcCache.computeIfAbsent(resType, k -> new ConcurrentHashMap<>());
 
-        log.info(keyPrefix + " data written to in‑JVM cache");
+        //遍历数据
+
+        for(T sr: svcResList) {
+            //构造第二层的key
+            Integer expiredTime = persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
+            String serviceInterval = sr.getServiceName() + "|" + sr.getInterval();
+            var podCache = byDataType.computeIfAbsent(
+                    serviceInterval,
+                    si -> CacheBuilder.newBuilder()
+                            .expireAfterWrite(610, TimeUnit.SECONDS)
+                            .build());
+            
+            String podName = sr.getPodName();
+            List<SvcRes> list = podCache.getIfPresent(podName);
+            if (list == null) {
+                list = new LinkedList<>();
+            }
+            list.add(sr);
+            podCache.put(podName, list);
+            log.info("cached [resType={}, serviceInterval={}, pod={}] -> list size={}",
+                    resType, serviceInterval, podCache, list.size());
+
+        }
     }
 
     /**
-     * @param key 依据实例的唯一设定的key获取相应的数据
-     * @return
+     * @return 依据唯一的服务实例映射相应的数据
+     *  resType -> serviceName|interval -> podName
      */
-    public Optional<SvcRes> getFromCache(String key) {
-        return Optional.ofNullable(cache.getIfPresent(key));
+    public Optional<List<SvcRes>> getResInPodLevel(
+            String resType,
+            String serviceName,
+            String interval,
+            String podName) {
+        String serviceInterval = serviceName + "|" + interval;
+        var byDataType = svcCache.get(resType);
+        if (byDataType == null) {
+            return Optional.empty();
+        }
+        var podCache = byDataType.get(serviceInterval);
+        if (podCache == null) {
+            return Optional.empty();
+        }
+        return Optional.of(podCache.getIfPresent(podName));
     }
 
+    /**
+     *  按 resType + serviceInterval 批量获取所有实例的列表
+     * @param resType 数据类型
+     * @param serviceInterval 时间窗口
+     * @return
+     */
+    public Map<String, List<SvcRes>> getResInServiceLevel(
+            String resType,
+            String serviceInterval
+    ) {
+        var byDataType = svcCache.get(resType);
+        if (byDataType == null) {
+            return Collections.emptyMap();
+        }
+        var podCache = byDataType.get(serviceInterval);
+        if (podCache == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, List<SvcRes>> result = new HashMap<>();
+        for (String podName : podCache.asMap().keySet()) {
+            List<SvcRes> list = podCache.getIfPresent(podName);
+            if (list != null) {
+                result.put(podName, list);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 按照数据类型resType直接将所有服务的所有实例的所有数据返回
+     * @return
+     */
+    public Map<String,Map<String,List<SvcRes>>> getResInTypeLevel(String resType) {
+        var byTypeData = svcCache.get(resType);
+        if (byTypeData == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, Map<String, List<SvcRes>>>  result = new HashMap<>();
+        for (Map.Entry<String,Cache<String,List<SvcRes>>> entry :byTypeData.entrySet()){
+            String serviceInterval = entry.getKey();
+            Cache<String, List<SvcRes>> podCache = entry.getValue();
+            //将缓存中的所有实例的所有数据全部输出
+
+            Map<String, List<SvcRes>> podMap = new HashMap<>();
+            for (String podName : podCache.asMap().keySet()) {
+                List<SvcRes> list = podCache.getIfPresent(podName);
+                if (list != null && !list.isEmpty()) {
+                    podMap.put(podName, list);
+                }
+            }
+            if (!podMap.isEmpty()){
+                result.put(serviceInterval, podMap);
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * @return 按照类型，获取某一类型下某一服务的所有实例的key值集合
+     */
+    public Set<String> getKeySetInSvcIvlLevel(String resType){
+        AbstractMap<String, Cache<String, List<SvcRes>>> byDataType = svcCache.get(resType);
+        if (byDataType == null) {
+            return Collections.emptySet();
+        }
+        Set<String> keySet = byDataType.keySet();
+        int interval = persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
+        //过滤数据，只获取当前数据收集时间窗口的正常数据
+        Set<String> filteredKeySet = keySet.stream().filter(sr -> sr.endsWith("|" + interval)).collect(Collectors.toSet());
+        return filteredKeySet;
+    }
 }

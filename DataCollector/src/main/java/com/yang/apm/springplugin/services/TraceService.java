@@ -1,4 +1,4 @@
-package com.yang.apm.springplugin.services.dynamicdetect;
+package com.yang.apm.springplugin.services;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
@@ -12,7 +12,6 @@ import com.yang.apm.springplugin.utils.TimeUtil;
 import com.yang.apm.springplugin.utils.TransactionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,8 +33,6 @@ public class TraceService {
     @Autowired
     private ElasticSearchQueryManager elasticSearchQueryManager;
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
 
     public List<SvcExternalMetricsRes> getMetricsInTraces(String endTimeString, Integer interval) {
         if (endTimeString == null || endTimeString.isEmpty()) {

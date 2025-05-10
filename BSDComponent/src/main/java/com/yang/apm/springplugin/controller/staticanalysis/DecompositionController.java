@@ -4,7 +4,8 @@ package com.yang.apm.springplugin.controller.staticanalysis;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.services.RedisAsyncService;
+import com.yang.apm.springplugin.services.DetectionItemBufferService;
+
 import com.yang.apm.springplugin.services.staticdetect.GreedyService;
 import com.yang.apm.springplugin.services.staticdetect.ScatteredService;
 import com.yang.apm.springplugin.services.staticdetect.WrongServiceCutService;
@@ -29,7 +30,8 @@ public class DecompositionController {
     private ScatteredService scatteredService;
 
     @Autowired
-    private RedisAsyncService redisAsyncService;
+    private DetectionItemBufferService detectionItemBufferService;
+
     @Autowired
     public WrongServiceCutService wrongServiceCutService;
     @Autowired
@@ -46,7 +48,7 @@ public class DecompositionController {
     public ResponseDTO<String> scatteredFunctionality(@RequestBody RequestItem requestItem) {
         log.info("Scattered Functionality for "+ requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = scatteredService.getSFServices(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 
@@ -55,7 +57,7 @@ public class DecompositionController {
     public ResponseDTO<String> wrongCuts(@RequestBody RequestItem requestItem) {
         log.info("Wrong cuts for "+ requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = wrongServiceCutService.getWrongServiceCutServices(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
 
     }
@@ -67,7 +69,7 @@ public class DecompositionController {
     public ResponseDTO<String> microserviceGreedy(@RequestBody RequestItem requestItem) throws IOException {
         log.info("Microservice greedy for "+ requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = greedyService.getGreedySvc(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 

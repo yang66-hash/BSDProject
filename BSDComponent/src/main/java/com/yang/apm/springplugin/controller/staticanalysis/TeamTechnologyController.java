@@ -4,7 +4,7 @@ package com.yang.apm.springplugin.controller.staticanalysis;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.services.RedisAsyncService;
+import com.yang.apm.springplugin.services.DetectionItemBufferService;
 import com.yang.apm.springplugin.services.staticdetect.SharedLibraryService;
 import com.yang.apm.springplugin.services.staticdetect.TooMuchStandardsService;
 import com.yang.model.ResponseDTO;
@@ -24,7 +24,7 @@ public class TeamTechnologyController {
 
 
     @Autowired
-    private RedisAsyncService redisAsyncService;
+    private DetectionItemBufferService detectionItemBufferService;
 
 
     @Autowired
@@ -44,7 +44,7 @@ public class TeamTechnologyController {
     public ResponseDTO<String> sharedLibraries(@RequestBody RequestItem requestItem) {
         log.info("Shared Libraries for "+ requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = sharedLibraryService.getSharedLibraries(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 

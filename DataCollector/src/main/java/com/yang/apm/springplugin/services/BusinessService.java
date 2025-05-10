@@ -1,4 +1,4 @@
-package com.yang.apm.springplugin.services.dynamicdetect;
+package com.yang.apm.springplugin.services;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;

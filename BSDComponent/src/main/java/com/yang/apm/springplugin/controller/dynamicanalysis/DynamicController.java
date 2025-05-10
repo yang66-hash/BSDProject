@@ -2,7 +2,6 @@ package com.yang.apm.springplugin.controller.dynamicanalysis;
 
 
 import com.yang.apm.springplugin.base.item.RequestItem;
-import com.yang.apm.springplugin.services.RedisAsyncService;
 import com.yang.apm.springplugin.services.dynamicdetect.detect.FragileServiceService;
 import com.yang.model.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +23,6 @@ public class DynamicController {
     private FragileServiceService fragileServiceService;
 
     //基础想法是将数据实时的拉取到Redis中，保证Redis中的数据始终是近30s的数据？
-
-    @Autowired
-    private RedisAsyncService redisAsyncService;
 
 
     @RequestMapping(path = "/fragile-service",

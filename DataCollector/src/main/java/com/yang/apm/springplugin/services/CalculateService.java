@@ -1,8 +1,11 @@
 package com.yang.apm.springplugin.services;
 
 
+import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.constant.ResType;
+import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
+import com.yang.apm.springplugin.pojo.result.SvcRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,46 +20,56 @@ import java.util.stream.Collectors;
 public class CalculateService {
 
     @Autowired
-    private RedisAsyncService redisAsyncService;
+    private CacheService cacheService;
+
+    @Autowired
+    private PersistentIntegerCacheService persistentIntegerCacheService;
+
+    @Autowired
+    private ElasticsearchClientManager elasticsearchClientManager;
+
+    /**
+     * @param list
+     * @param clazz 需要是SvcRes的子类
+     * @param <T>
+     * @return 将指定的List<SvcRes>转为指定子类的list列表
+     */
+    private <T extends SvcRes> List<T> convertCache2SpecSubClaList(List<SvcRes> list,Class<T> clazz){
+        return list.stream()
+                .filter(clazz::isInstance).map(clazz::cast)
+                .collect(Collectors.toList());
+    }
 
     /**
      * 计算历史数据的平均值，并将数据发送到es中进行存储，以便展示
      */
     public void calculateAvg4ExternalMetrics(){
 
-        //从redis中拉取十分钟的数据进行计算，并将数据上传至es中
-        String traceKeyPattern = ResType.EXTERNAL_METRICS.name() + "|" + redisAsyncService.searchInterval() + "|*";
-        Set<String> keySet = redisAsyncService.matchedPatternSet(traceKeyPattern);
-        log.info(String.valueOf(keySet.size()));
-        log.info(keySet.toString());
-        //将keySet按照实例进行划分,每一个实例下的所有数据在一个list中
-        Map<String, List<String>> instanceDataMap = new HashMap<>();
-        keySet.stream().forEach(key->{
-            String instanceKey = key.substring(0, key.lastIndexOf("|"));
-            log.info("instanceKey:" + instanceKey);
-            instanceDataMap.computeIfAbsent(instanceKey, k->new ArrayList<>()).add(key);
+        //从cache中依据服务实例计算每一个服务实例的平均值 按照服务名-interval一个从缓存中复制计算
+        //其中的key是service|interval
+        Set<String> keySetInSvcIvlLevel = cacheService.getKeySetInSvcIvlLevel(ResType.EXTERNAL_METRICS.name());
 
-        });
+        //针对每一个服务进行相应计算
+        keySetInSvcIvlLevel.forEach(key->{
+            Map<String, List<SvcRes>> resInServiceLevel = cacheService.getResInServiceLevel(ResType.EXTERNAL_METRICS.name(), key);
+            //针对每一个实例进行计算
+            resInServiceLevel.forEach((podName,svcResList)->{
+                //依据每一个实例进行计算 计算完后将数据上传到ES
+                List<SvcExternalMetricsRes> externalMetricsRes = convertCache2SpecSubClaList(svcResList, SvcExternalMetricsRes.class);
+                SvcExternalMetricsRes svcExternalMetricsRes = calculateExternalMetricsByInstance(externalMetricsRes);
+                //将计算的历史数据平均结果直接发送到ES中
 
-        // 对每个实例的数据进行计算并上传到 Elasticsearch 这里的uniqueNote: ResType|interval|serviceName|Language|podName
-        instanceDataMap.forEach((UniqueNote,keys)->{
-            List<SvcExternalMetricsRes> externalMetricsResList = new LinkedList<>();
+                //将指标直接发送到es中的指定index下
 
-            keys.forEach(key -> {
-                // 从 Redis 中获取每个键对应的 hash 数据
-                SvcExternalMetricsRes data = redisAsyncService.getHashAsObject(key, SvcExternalMetricsRes.class);
-                externalMetricsResList.add(data);
+
             });
-            externalMetricsResList.sort(Comparator.comparing(SvcExternalMetricsRes::getEndTime).reversed());
-
-            SvcExternalMetricsRes calculatedData = calculateExternalMetrics(externalMetricsResList);
-
-            //将平均值发送到es中
-            System.out.println(calculatedData.toString());
         });
+
+
+
     }
 
-    private SvcExternalMetricsRes calculateExternalMetrics(List<SvcExternalMetricsRes> externalMetricsResList) {
+    private SvcExternalMetricsRes calculateExternalMetricsByInstance(List<SvcExternalMetricsRes> externalMetricsResList) {
         SvcExternalMetricsRes result = new SvcExternalMetricsRes();
 
         // 初始化总和和计数器
@@ -144,11 +157,10 @@ public class CalculateService {
         result.setPodName(externalMetricsResList.get(0).getPodName());
 
         //获取窗口大小,若是redis中收集到的数据还不足用户设置的大小,那么窗口设置为实际大小
-        result.setInterval(Math.min(redisAsyncService.searchTimeWindow(),redisAsyncService.searchCurWindow()));
+        result.setInterval(Math.min(persistentIntegerCacheService.get(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY),persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY)));
         Date endTime = externalMetricsResList.get(0).getEndTime();
         // Convert Date to LocalDateTime
         LocalDateTime localEndTime = endTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
         // Subtract 10 minutes
         LocalDateTime localStartTime = localEndTime.minusMinutes(externalMetricsResList.size());
 
@@ -157,20 +169,5 @@ public class CalculateService {
         result.setStartTime(startTime);
         return result;
     }
-
-    private List<SvcExternalMetricsRes> getDataFromRedis(Set<String> keySet) {
-        //将keySet按照降序排列 取出全部或者是前十个
-        keySet = keySet.stream().sorted(Comparator.reverseOrder())
-                .limit(10)
-                .collect(Collectors.toSet());
-        List<SvcExternalMetricsRes> transResList = new LinkedList<>();
-        for (String key : keySet) {
-            SvcExternalMetricsRes transRes = redisAsyncService.getHashAsObject(key, SvcExternalMetricsRes.class);
-            transResList.add(transRes);
-        }
-        return transResList;
-    }
-
-
 
 }

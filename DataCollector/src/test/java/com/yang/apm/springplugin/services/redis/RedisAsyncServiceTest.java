@@ -1,32 +1,20 @@
 package com.yang.apm.springplugin.services.redis;
 
-import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
-import com.yang.apm.springplugin.services.RedisAsyncService;
-import com.yang.apm.springplugin.services.dynamicdetect.MetricsService;
-import com.yang.apm.springplugin.services.dynamicdetect.TraceService;
+import com.yang.apm.springplugin.services.MetricsService;
+import com.yang.apm.springplugin.services.TraceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
-import java.util.Set;
 
 @SpringBootTest
 class RedisAsyncServiceTest {
 
-
-    @Autowired
-    RedisAsyncService redisAsyncService;
-
     @Autowired
     private MetricsService metricsService;
-
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private TraceService traceService;
 
@@ -39,17 +27,13 @@ class RedisAsyncServiceTest {
 
     @Test
     public void testTrace() {
-        Integer interval = redisAsyncService.searchInterval();
+        Integer interval = 1;
         List<SvcExternalMetricsRes> traces0 = traceService.getMetricsInTraces("2025-04-29 16:05:00",interval);
         List<SvcExternalMetricsRes> traces1 = traceService.getMetricsInTraces("2025-04-29 16:04:00",interval);
         List<SvcExternalMetricsRes> traces2 = traceService.getMetricsInTraces("2025-04-29 16:03:00",interval);
         List<SvcExternalMetricsRes> traces3 = traceService.getMetricsInTraces("2025-04-29 16:02:00",interval);
         List<SvcExternalMetricsRes> traces4 = traceService.getMetricsInTraces("2025-04-29 16:01:00",interval);
-        redisAsyncService.saveT2Redis(traces0, ResType.EXTERNAL_METRICS.name(),"2025-04-29 16:05:00");
-        redisAsyncService.saveT2Redis(traces1, ResType.EXTERNAL_METRICS.name(),"2025-04-29 16:04:00");
-        redisAsyncService.saveT2Redis(traces2, ResType.EXTERNAL_METRICS.name(),"2025-04-29 16:03:00");
-        redisAsyncService.saveT2Redis(traces3, ResType.EXTERNAL_METRICS.name(),"2025-04-29 16:02:00");
-        redisAsyncService.saveT2Redis(traces4, ResType.EXTERNAL_METRICS.name(),"2025-04-29 16:01:00");
+
     }
 
     @Test
@@ -64,9 +48,6 @@ class RedisAsyncServiceTest {
     @Test
     public void matchedPatternSetTest(){
 
-        String traceKeyPattern = "TRACE:5:cloud-user-service*";
-        Set<String> stringSet = redisAsyncService.matchedPatternSet(traceKeyPattern);
-        System.out.println(stringSet);
     }
 
 //

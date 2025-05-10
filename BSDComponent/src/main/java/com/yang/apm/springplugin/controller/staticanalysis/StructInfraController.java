@@ -4,7 +4,8 @@ package com.yang.apm.springplugin.controller.staticanalysis;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.services.RedisAsyncService;
+import com.yang.apm.springplugin.services.DetectionItemBufferService;
+
 import com.yang.apm.springplugin.services.staticdetect.ESBService;
 import com.yang.apm.springplugin.services.staticdetect.HubService;
 import com.yang.apm.springplugin.services.staticdetect.NoGateWayService;
@@ -25,7 +26,7 @@ public class StructInfraController {
 
 
     @Autowired
-    private RedisAsyncService redisAsyncService;
+    private DetectionItemBufferService detectionItemBufferService;
 
     @Autowired
     private ESBService esbService;
@@ -55,7 +56,7 @@ public class StructInfraController {
         log.info("ESB usage for " + requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = esbService.getESBServices(requestItem);
         log.info(detectionResItem.toString());
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 
@@ -65,7 +66,7 @@ public class StructInfraController {
         log.info("No API gateway for " + requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = noGateWayService.isExistGateWay(requestItem);
         log.info(detectionResItem.toString());
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 
@@ -77,7 +78,7 @@ public class StructInfraController {
     public ResponseDTO<String> hubLikeDependency(@RequestBody RequestItem requestItem) {
         log.info("Hub-like Dependency for " + requestItem.getServiceName() + " start ...");
         DetectionResItem detectionResItem = hubService.getHubClass(requestItem);
-        redisAsyncService.pushToRedis(ConstantUtil.REDIS_DETECTION_RECORD_LIST, detectionResItem);
+        detectionItemBufferService.addResItem(detectionResItem);
         return ResponseDTO.success("Detect command reached.");
     }
 
