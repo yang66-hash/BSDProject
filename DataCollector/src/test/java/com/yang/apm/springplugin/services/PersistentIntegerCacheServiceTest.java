@@ -13,15 +13,30 @@ class PersistentIntegerCacheServiceTest {
 
     @Test
     public void putInterval() {
-        persistentIntegerCacheService.put(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY,1);
+        persistentIntegerCacheService.put(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY,60);
     }
 
     @Test
     public void putWindow() {
-        persistentIntegerCacheService.put(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY,10);
+        persistentIntegerCacheService.put(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY,600);
     }
     @Test
     public void putCurWindow() {
-        persistentIntegerCacheService.put(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY,5);
+        persistentIntegerCacheService.put(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY,60);
     }
+
+    @Test
+    public void delInterval() {
+        persistentIntegerCacheService.delete(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
+    }
+
+    @Test
+    public void delWindow() {
+        persistentIntegerCacheService.delete(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
+    }
+    @Test
+    public void delCurWindow() {
+        persistentIntegerCacheService.delete(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY);
+    }
+
 }

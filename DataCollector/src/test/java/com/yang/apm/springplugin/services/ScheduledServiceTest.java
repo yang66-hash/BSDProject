@@ -1,5 +1,8 @@
 package com.yang.apm.springplugin.services;
 
+import com.yang.apm.springplugin.constant.ConstantUtil;
+import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
+import com.yang.apm.springplugin.manager.indexmapping.ExternalMetricsMappingStrategy;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,9 +15,30 @@ class ScheduledServiceTest {
     @Autowired
     private ScheduledService scheduledService;
 
+    @Autowired
+    private PersistentIntegerCacheService persistentIntegerCacheService;
+
+    @Autowired
+    private ElasticsearchClientManager elasticsearchClientManager;
+
 
     @Test
     public void testScheduledExternalMetrics(){
         scheduledService.getMetricsScheduled();
+    }
+
+    @Test
+    public void createIndexByStrategyTest(){
+        Integer interval = persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
+        Integer timeWindow = persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
+
+        String externalMetricsIndex = ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX + "." + interval + "s";
+        String externalMetricsHistoryIndex = ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX + "." + timeWindow + "s";
+        if (!elasticsearchClientManager.isIndexExisted(externalMetricsIndex)) {
+            elasticsearchClientManager.createIndexWithStrategy(externalMetricsIndex,new ExternalMetricsMappingStrategy());
+        }
+        if (!elasticsearchClientManager.isIndexExisted(externalMetricsHistoryIndex)) {
+            elasticsearchClientManager.createIndexWithStrategy(externalMetricsHistoryIndex,new ExternalMetricsMappingStrategy());
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.yang.apm.springplugin.services.redis;
+package com.yang.apm.springplugin.services.trace;
 
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-class RedisAsyncServiceTest {
+class MetricsServiceTest {
 
     @Autowired
     private MetricsService metricsService;
@@ -21,7 +21,8 @@ class RedisAsyncServiceTest {
     @Test
     public void test() {
 
-        List<SvcMetricsRes> internalMetrics = metricsService.getInternalMetrics("2025-04-29 16:05:00", 5);
+        List<SvcMetricsRes> internalMetrics = metricsService.getInternalMetrics("2025-04-29 16:05:00", 60);
+        System.out.println(internalMetrics);
 //        redisAsyncService.saveT2Redis(internalMetrics, ResType.INTERNAL_METRICS.name());
     }
 
