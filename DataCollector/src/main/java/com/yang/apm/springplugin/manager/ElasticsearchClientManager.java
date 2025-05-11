@@ -1,13 +1,24 @@
 package com.yang.apm.springplugin.manager;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.IndexRequest;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import co.elastic.clients.util.ObjectBuilder;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.yang.apm.springplugin.pojo.ElasticsearchSettings;
+import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
+import com.yang.apm.springplugin.pojo.result.SvcRes;
+import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
+import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
@@ -21,7 +32,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 import java.util.function.Function;
+
+import static org.bouncycastle.asn1.cms.CMSObjectIdentifiers.data;
 
 @Component
 @Slf4j
@@ -37,6 +51,8 @@ public class ElasticsearchClientManager {
     @PostConstruct
     public void init() {
         this.refreshElasticsearchClient();  // 初始化时创建 ElasticsearchClient
+
+
     }
 
     // 每次监听事件时，重新创建ElasticsearchClient
@@ -91,5 +107,75 @@ public class ElasticsearchClientManager {
         }
         return false;
     }
+
+    /**
+     * @param indexName 索引文件名称
+     * @param data 需要上传的数据
+     * @param <T> 需要是SvcRes的子类
+     * @return
+     */
+    public <T extends SvcRes> boolean saveData2Index(String indexName, T data){
+        try {
+            IndexRequest.Builder<Object> builder = new IndexRequest.Builder<>();
+            IndexRequest<Object> indexRequest = builder
+                    .index(indexName)
+                    .document(data)
+                    .build();
+
+            IndexResponse index = elasticsearchClient.index(indexRequest);
+            if (index.result() == Result.Created){
+                log.info("Document indexed successfully!");
+                return true;
+            }else {
+                log.error("Document indexed failed! {}", index.result());
+                return false;
+            }
+        } catch (IOException e) {
+            log.error("Failed to add document.errors as follows: {}",e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * @param indexName 索引文件名
+     * @param data 所需发送的数据
+     * @return 调用Bulk API 批量发送数据
+     */
+    public <T extends SvcRes> boolean bulkData2Index(String indexName, List<T> data){
+        if (data==null||data.isEmpty()){
+            return true;
+        }
+        try {
+            BulkRequest.Builder builder;
+            if (data.get(0) instanceof SvcExternalMetricsRes){
+                builder = constructBulkOps(indexName, data, SvcExternalMetricsRes.class);
+                elasticsearchClient.bulk(builder.build());
+
+            }
+            if (data.get(0) instanceof SvcMetricsRes){
+                builder = constructBulkOps(indexName, data, SvcMetricsRes.class);
+                elasticsearchClient.bulk(builder.build());
+            }
+            //有待扩展
+            return true;
+        } catch (IOException e) {
+            log.error("Bulk API Failed, data were resent to blocking queue. Try again later.", e);
+            return false;
+        }
+    }
+
+    private <T extends SvcRes> BulkRequest.Builder constructBulkOps(String indexName, List<?> svcResList, Class<T> clazz ) {
+        BulkRequest.Builder builder = new BulkRequest.Builder();
+
+        for(Object obj : svcResList){
+            //将数据转换成JSON字符串，并进行反序列化
+            String jsonString = JSON.toJSONString(obj);
+            T item = JSONObject.parseObject(jsonString, clazz);
+            BulkOperation bulkOperation = new BulkOperation.Builder().create(d->d.document(item).index(indexName)).build();
+            builder.operations(bulkOperation);
+        }
+        return builder;
+    }
+
 
 }
