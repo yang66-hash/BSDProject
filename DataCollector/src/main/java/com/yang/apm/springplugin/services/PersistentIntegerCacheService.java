@@ -41,6 +41,10 @@ public class PersistentIntegerCacheService {
         return map.get(key);
     }
 
+    public void delete(String key){
+        map.remove(key);
+    }
+
     public void put(String key, Integer value) {
         map.put(key, value);
         db.commit();  // 提交到文件
