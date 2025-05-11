@@ -16,6 +16,7 @@ public class ElasticsearchSettingsListener {
     public void onConfigChange(ElasticsearchSettingsChangeEvent event){
         log.info("elasticsearch settings changing...");
         elasticsearchClientManager.refreshElasticsearchClient();
+        //这个地方也得检测索引是否创建
     }
 
 }

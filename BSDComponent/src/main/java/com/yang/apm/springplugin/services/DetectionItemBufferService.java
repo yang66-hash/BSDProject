@@ -66,7 +66,7 @@ public class DetectionItemBufferService {
             elasticsearchClientManager.getElasticsearchClient().bulk(builder.build());
         } catch (IOException e) {
             buffer.addAll(batch);
-            log.error("ES 写入失败，已重放到队列，下次重试", e);
+            log.error("Bulk API Failed, data were resent to blocking queue. Try again later.", e);
         }
     }
 

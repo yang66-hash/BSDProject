@@ -6,6 +6,7 @@ import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
+import com.yang.apm.springplugin.utils.IndexUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ public class CalculateService {
         //其中的key是service|interval
         Set<String> keySetInSvcIvlLevel = cacheService.getKeySetInSvcIvlLevel(ResType.EXTERNAL_METRICS.name());
 
+        List<SvcExternalMetricsRes> historyCalList = new LinkedList<>();
         //针对每一个服务进行相应计算
         keySetInSvcIvlLevel.forEach(key->{
             Map<String, List<SvcRes>> resInServiceLevel = cacheService.getResInServiceLevel(ResType.EXTERNAL_METRICS.name(), key);
@@ -57,14 +59,14 @@ public class CalculateService {
                 //依据每一个实例进行计算 计算完后将数据上传到ES
                 List<SvcExternalMetricsRes> externalMetricsRes = convertCache2SpecSubClaList(svcResList, SvcExternalMetricsRes.class);
                 SvcExternalMetricsRes svcExternalMetricsRes = calculateExternalMetricsByInstance(externalMetricsRes);
-                //将计算的历史数据平均结果直接发送到ES中
-
-                //将指标直接发送到es中的指定index下
-
-
+                historyCalList.add(svcExternalMetricsRes);
             });
         });
 
+        String externalMetricsIndex = IndexUtil.getExternalMetricsIndex(persistentIntegerCacheService.get(ResType.EXTERNAL_METRICS.name()));
+
+        //将数据存储到本地，然后统一发送， 不然数据发送失败 数据就消失了
+        elasticsearchClientManager.bulkData2Index(externalMetricsIndex, historyCalList);
 
 
     }
@@ -156,7 +158,7 @@ public class CalculateService {
         result.setLanguage(externalMetricsResList.get(0).getLanguage());
         result.setPodName(externalMetricsResList.get(0).getPodName());
 
-        //获取窗口大小,若是redis中收集到的数据还不足用户设置的大小,那么窗口设置为实际大小
+        //获取窗口大小,若是收集到的数据还不足用户设置的大小,那么窗口设置为实际大小
         result.setInterval(Math.min(persistentIntegerCacheService.get(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY),persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY)));
         Date endTime = externalMetricsResList.get(0).getEndTime();
         // Convert Date to LocalDateTime

@@ -178,7 +178,14 @@ public class ElasticsearchClientManager {
         }
     }
 
-    private <T extends SvcRes> BulkRequest.Builder constructBulkOps(String indexName, List<?> svcResList, Class<T> clazz ) {
+    /**
+     * @param indexName 文件索引名
+     * @param svcResList 待发送的数据列表
+     * @param clazz 数据转换时类对象
+     * @param
+     * @return 构造指定数据svcResList上传到index的BulkRequest.Builder
+     */
+    public  <T extends SvcRes> BulkRequest.Builder constructBulkOps(String indexName, List<?> svcResList, Class<T> clazz ) {
         BulkRequest.Builder builder = new BulkRequest.Builder();
 
         for(Object obj : svcResList){

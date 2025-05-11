@@ -4,10 +4,13 @@ import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import co.elastic.clients.util.ObjectBuilder;
 import com.yang.apm.springplugin.constant.ConstantUtil;
 
+import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
+import com.yang.apm.springplugin.services.TraceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +20,9 @@ class ElasticsearchClientManagerTest {
 
     @Autowired
     private ElasticsearchClientManager elasticsearchClientManager;
+
+    @Autowired
+    private TraceService traceService;
 
     @Test
     public void createExternalMetrics10min(){
@@ -40,7 +46,7 @@ class ElasticsearchClientManagerTest {
                 .properties("sqlQueryCount",p->p.keyword(k->k))
                 .properties("slowQueryCount",p->p.keyword(k->k))
                 .properties("serviceCallNumMap",p->p.object(obj->obj.enabled(true)));
-        elasticsearchClientManager.createIndexByName(ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX+ ".10min",fn);
+        elasticsearchClientManager.createIndexByName(ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX+ ".6000s",fn);
     }
 
     @Test
@@ -65,6 +71,18 @@ class ElasticsearchClientManagerTest {
                 .properties("sqlQueryCount",p->p.keyword(k->k))
                 .properties("slowQueryCount",p->p.keyword(k->k))
                 .properties("serviceCallNumMap",p->p.object(obj->obj.enabled(true)));
-        elasticsearchClientManager.createIndexByName(ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX+ ".1min",fn);
+        elasticsearchClientManager.createIndexByName(ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX+ ".60s",fn);
+    }
+
+    @Test
+    public void saveData2IndexTest(){
+        List<SvcExternalMetricsRes> metricsInTraces = traceService.getMetricsInTraces("2025-04-29 16:05:00", 1);
+        elasticsearchClientManager.bulkData2Index("bsd.analysis.metrics.external.1min",metricsInTraces);
+    }
+
+    @Test
+    public void isIndexExistedTest(){
+        boolean indexExisted = elasticsearchClientManager.isIndexExisted(ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX + ".1min");
+        System.out.println(indexExisted);
     }
 }

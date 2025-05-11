@@ -1,4 +1,4 @@
-package com.yang.apm.springplugin.services.dynamicdetect.detect;
+package com.yang.apm.springplugin.services.dynamicdetect;
 
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;

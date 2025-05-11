@@ -40,7 +40,6 @@ public class MetricsService {
         if (endTimeString == null || interval == null) {
             return new LinkedList<>();
         }
-
         try {
             Date endTime = TimeUtil.parseStr2Date(endTimeString);
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);

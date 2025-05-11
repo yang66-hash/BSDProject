@@ -2,7 +2,7 @@ package com.yang.apm.springplugin.controller.dynamicanalysis;
 
 
 import com.yang.apm.springplugin.base.item.RequestItem;
-import com.yang.apm.springplugin.services.dynamicdetect.detect.FragileServiceService;
+import com.yang.apm.springplugin.services.dynamicdetect.FragileServiceService;
 import com.yang.model.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
