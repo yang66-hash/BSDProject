@@ -25,7 +25,7 @@ public class SvcRes {
      * interval equals to startTime - endTime
      * unit: min
      */
-    @Schema(description = "时间间隔 单位：分")
+    @Schema(description = "时间间隔 单位：秒")
     private Integer interval;
     /**
      * unique id: language-serviceName-podName

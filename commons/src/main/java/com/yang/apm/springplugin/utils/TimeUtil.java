@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class TimeUtil {
 
-    public static Date calculateStartTime(Date endTime, int intervalInMinutes) {
-        return new Date(endTime.getTime() - intervalInMinutes * 60 * 1000);
+    public static Date calculateStartTime(Date endTime, int intervalInSecond) {
+        return new Date(endTime.getTime() - intervalInSecond * 1000);
     }
 
     public static Date parseStr2Date(String timeStr) throws ParseException {

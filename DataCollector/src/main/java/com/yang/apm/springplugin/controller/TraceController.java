@@ -44,7 +44,7 @@ public class TraceController {
     @ApiOperation("用于获取一段时间内的traces数据")
     @Parameters({
             @Parameter(name = "endTime", description = "获取资源的时间末点 yyyy-MM-dd HH:mm:ss", required = true),
-            @Parameter(name = "interval", description = "获取资源的时间间隔，单位：分", required = true),
+            @Parameter(name = "interval", description = "获取资源的时间间隔，单位：秒", required = true),
     })
     public ResponseDTO<List<SvcExternalMetricsRes>> getTraces(@RequestParam("endTime") String endTimeString,
                                                               @RequestParam("interval") Integer interval) {

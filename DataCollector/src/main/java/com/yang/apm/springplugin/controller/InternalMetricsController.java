@@ -46,7 +46,7 @@ public class InternalMetricsController {
     @Operation(description = "用于获取业务逻辑层相关指标数据,默认30s收集一次数据")
     @Parameters({
             @Parameter(name = "endTime", description = "获取资源的时间末点 yyyy-MM-dd HH:mm:ss", required = true),
-            @Parameter(name = "interval", description = "获取资源的时间间隔，单位：分", required = true),
+            @Parameter(name = "interval", description = "获取资源的时间间隔，单位：秒", required = true),
             @Parameter(name = "serviceName", description = "搜集对应的服务名称", required = true)
     })
     public ResponseDTO<List<SvcMetricsRes>> getInternalMetrics(@RequestParam("endTime") String endTimeString,
