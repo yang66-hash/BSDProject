@@ -9,6 +9,8 @@ import co.elastic.clients.elasticsearch.core.IndexResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
+import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
+import co.elastic.clients.elasticsearch.indices.GetIndexResponse;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import co.elastic.clients.util.ObjectBuilder;
@@ -175,6 +177,26 @@ public class ElasticsearchClientManager {
             builder.operations(bulkOperation);
         }
         return builder;
+    }
+
+    /**
+     * @param indexName 索引文件名
+     * @return 判断某一个索引文件是否存在
+     */
+    public boolean isIndexExisted(String indexName){
+        GetIndexRequest getIndexRequest = new GetIndexRequest.Builder()
+                .index(indexName)
+                .build();
+        try {
+            GetIndexResponse getIndexResponse = elasticsearchClient.indices().get(getIndexRequest);
+            if (getIndexResponse != null){
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            log.error("index file in error status.error as below: {}", e.getMessage());
+            return false;
+        }
     }
 
 
