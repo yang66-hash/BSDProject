@@ -63,10 +63,10 @@ public class CalculateService {
             });
         });
 
-        String externalMetricsIndex = IndexUtil.getExternalMetricsIndex(persistentIntegerCacheService.get(ResType.EXTERNAL_METRICS.name()));
+        String externalMetricsHistoryIndex = IndexUtil.getExternalMetricsIndex(persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
 
         //将数据存储到本地，然后统一发送， 不然数据发送失败 数据就消失了
-        elasticsearchClientManager.bulkData2Index(externalMetricsIndex, historyCalList);
+        elasticsearchClientManager.bulkData2Index(externalMetricsHistoryIndex, historyCalList);
 
 
     }

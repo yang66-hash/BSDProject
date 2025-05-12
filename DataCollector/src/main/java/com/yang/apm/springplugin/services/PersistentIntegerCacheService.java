@@ -26,8 +26,10 @@ public class PersistentIntegerCacheService {
 
 
     public PersistentIntegerCacheService() {
+        File file = new File(FILE_NAME);
+        log.info("MapDB file will be created at: {}", file.getAbsolutePath());
         this.db = DBMaker
-                .fileDB(new File(FILE_NAME))
+                .fileDB(file)
                 .fileMmapEnableIfSupported()
                 .closeOnJvmShutdown()
                 .make();

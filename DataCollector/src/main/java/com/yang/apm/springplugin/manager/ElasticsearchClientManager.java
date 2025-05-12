@@ -164,11 +164,13 @@ public class ElasticsearchClientManager {
             if (data.get(0) instanceof SvcExternalMetricsRes){
                 builder = constructBulkOps(indexName, data, SvcExternalMetricsRes.class);
                 elasticsearchClient.bulk(builder.build());
+                log.info("External metrics of service were collected and  sent to ES successfully.");
 
             }
             if (data.get(0) instanceof SvcMetricsRes){
                 builder = constructBulkOps(indexName, data, SvcMetricsRes.class);
                 elasticsearchClient.bulk(builder.build());
+                log.info("Metrics of service were collected and  sent to ES successfully.");
             }
             //有待扩展
             return true;

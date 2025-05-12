@@ -13,7 +13,10 @@ class PersistentIntegerCacheServiceTest {
 
     @Test
     public void putInterval() {
-        persistentIntegerCacheService.put(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY,60);
+
+        System.out.println(System.getProperty("user.dir"));
+
+//        persistentIntegerCacheService.put(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY,60);
     }
 
     @Test
@@ -37,6 +40,12 @@ class PersistentIntegerCacheServiceTest {
     @Test
     public void delCurWindow() {
         persistentIntegerCacheService.delete(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY);
+    }
+    @Test
+    public void get() {
+        System.out.println(persistentIntegerCacheService.get(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY));
+        System.out.println(persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY));
+        System.out.println(persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
     }
 
 }

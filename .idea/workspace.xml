@@ -4,20 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="feat: create Index&#10; and add getExternalMetricsIndex function">
-      <change afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/MetricsBufferService.java" afterDir="false" />
+    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="feat: finish send buffer in data collector for calculated data">
+      <change afterPath="$PROJECT_DIR$/DataCollector/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/controller/APIController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/DetectionItemBufferService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/DetectionItemBufferService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/detect/FragileServiceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/FragileServiceService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataCollector/cache.db" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/cache.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/listener/ElasticsearchSettingsListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/listener/ElasticsearchSettingsListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/DataCollectApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/DataCollectApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/manager/ElasticsearchClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/manager/ElasticsearchClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/CacheService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/CacheService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/CalculateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/CalculateService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/MetricsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/MetricsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/PersistentIntegerCacheService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/PersistentIntegerCacheService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/ScheduledService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/main/java/com/yang/apm/springplugin/services/ScheduledService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataCollector/src/test/java/com/yang/apm/springplugin/manager/ElasticsearchClientManagerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/test/java/com/yang/apm/springplugin/manager/ElasticsearchClientManagerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataCollector/src/test/java/com/yang/apm/springplugin/services/ScheduledServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/test/java/com/yang/apm/springplugin/services/ScheduledServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataCollector/src/test/java/com/yang/apm/springplugin/services/PersistentIntegerCacheServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataCollector/src/test/java/com/yang/apm/springplugin/services/PersistentIntegerCacheServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cache.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hit/digitalsimulation/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/hit/digitalsimulation/AppTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +81,7 @@
     "JUnit.PersistentIntegerCacheServiceTest.delCurWindow.executor": "Run",
     "JUnit.PersistentIntegerCacheServiceTest.delInterval.executor": "Run",
     "JUnit.PersistentIntegerCacheServiceTest.delWindow.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.get.executor": "Run",
     "JUnit.PersistentIntegerCacheServiceTest.putCurWindow.executor": "Run",
     "JUnit.PersistentIntegerCacheServiceTest.putInterval.executor": "Run",
     "JUnit.PersistentIntegerCacheServiceTest.putWindow.executor": "Run",
@@ -151,8 +153,8 @@
       <recent name="com.yang.apm.springplugin.factory" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ScheduledServiceTest.createIndexByStrategyTest">
-    <configuration name="PersistentIntegerCacheServiceTest.delCurWindow" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Spring Boot.DataCollectApplication">
+    <configuration name="PersistentIntegerCacheServiceTest.delInterval" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="DataCollector" />
       <extension name="coverage">
         <pattern>
@@ -162,13 +164,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.yang.apm.springplugin.services" />
       <option name="MAIN_CLASS_NAME" value="com.yang.apm.springplugin.services.PersistentIntegerCacheServiceTest" />
-      <option name="METHOD_NAME" value="delCurWindow" />
+      <option name="METHOD_NAME" value="delInterval" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PersistentIntegerCacheServiceTest.delWindow" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PersistentIntegerCacheServiceTest.get" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="DataCollector" />
       <extension name="coverage">
         <pattern>
@@ -178,7 +180,23 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.yang.apm.springplugin.services" />
       <option name="MAIN_CLASS_NAME" value="com.yang.apm.springplugin.services.PersistentIntegerCacheServiceTest" />
-      <option name="METHOD_NAME" value="delWindow" />
+      <option name="METHOD_NAME" value="get" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PersistentIntegerCacheServiceTest.putCurWindow" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="DataCollector" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yang.apm.springplugin.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.yang.apm.springplugin.services" />
+      <option name="MAIN_CLASS_NAME" value="com.yang.apm.springplugin.services.PersistentIntegerCacheServiceTest" />
+      <option name="METHOD_NAME" value="putCurWindow" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -216,22 +234,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ScheduledServiceTest.createIndexByStrategyTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="DataCollector" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.yang.apm.springplugin.services.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.yang.apm.springplugin.services" />
-      <option name="MAIN_CLASS_NAME" value="com.yang.apm.springplugin.services.ScheduledServiceTest" />
-      <option name="METHOD_NAME" value="createIndexByStrategyTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="BSDComponentApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="BSDComponent" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.yang.apm.springplugin.BSDComponentApplication" />
@@ -248,11 +250,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ScheduledServiceTest.createIndexByStrategyTest" />
-        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.putWindow" />
         <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.putInterval" />
-        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.delCurWindow" />
-        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.delWindow" />
+        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.delInterval" />
+        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.putCurWindow" />
+        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.putWindow" />
+        <item itemvalue="JUnit.PersistentIntegerCacheServiceTest.get" />
       </list>
     </recent_temporary>
   </component>
@@ -277,7 +279,8 @@
       <workItem from="1746704190219" duration="9098000" />
       <workItem from="1746754903782" duration="30542000" />
       <workItem from="1746841263868" duration="8566000" />
-      <workItem from="1746927757775" duration="21530000" />
+      <workItem from="1746927757775" duration="22209000" />
+      <workItem from="1746972895016" duration="13388000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <option name="closed" value="true" />
@@ -375,7 +378,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746948146409</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="feat: finish send buffer in data collector for calculated data">
+      <option name="closed" value="true" />
+      <created>1746972569272</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1746972569272</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -394,6 +405,7 @@
     <MESSAGE value="test:add some tests" />
     <MESSAGE value="feat: add delete function in PersistentIntegerCacheService" />
     <MESSAGE value="feat: create Index&#10; and add getExternalMetricsIndex function" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: create Index&#10; and add getExternalMetricsIndex function" />
+    <MESSAGE value="feat: finish send buffer in data collector for calculated data" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: finish send buffer in data collector for calculated data" />
   </component>
 </project>

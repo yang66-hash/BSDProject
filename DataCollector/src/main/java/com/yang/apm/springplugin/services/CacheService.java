@@ -42,10 +42,6 @@ public class CacheService {
     //将缓存中的检测结果发送到ES中
 
 
-
-
-
-
     public <T extends SvcRes> void saveT2Cache(List<T> svcResList, String resType) {
         if (svcResList == null || svcResList.isEmpty()) {
             return;
@@ -63,7 +59,7 @@ public class CacheService {
             var podCache = byDataType.computeIfAbsent(
                     serviceInterval,
                     si -> CacheBuilder.newBuilder()
-                            .expireAfterWrite(610, TimeUnit.SECONDS)
+                            .expireAfterWrite(expiredTime, TimeUnit.SECONDS)
                             .build());
             
             String podName = sr.getPodName();
@@ -173,5 +169,33 @@ public class CacheService {
         //过滤数据，只获取当前数据收集时间窗口的正常数据
         Set<String> filteredKeySet = keySet.stream().filter(sr -> sr.endsWith("|" + interval)).collect(Collectors.toSet());
         return filteredKeySet;
+    }
+
+    public boolean isCacheEmpty(){
+        if (svcCache.isEmpty()){
+            return true;
+        }
+
+        for (Map.Entry<String, ConcurrentHashMap<String, Cache<String, List<SvcRes>>>> entry : svcCache.entrySet()){
+            AbstractMap<String, Cache<String, List<SvcRes>>> innerMap = entry.getValue();
+            if (innerMap == null || innerMap.isEmpty()){
+                continue;
+            }
+
+            for (Map.Entry<String, Cache<String, List<SvcRes>>> innerEntry : innerMap.entrySet()){
+                Cache<String, List<SvcRes>> cache = innerEntry.getValue();
+                if (cache == null || cache.asMap().isEmpty()){
+                    continue;
+                }
+                for (List<SvcRes> list : cache.asMap().values()) {
+                    if (list != null && !list.isEmpty()) {
+                        return false;  // 如果有非空的 List，表示 map 有数据
+                    }
+                }
+
+            }
+
+        }
+        return true;
     }
 }
