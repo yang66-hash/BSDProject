@@ -6,6 +6,7 @@ import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
+import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import com.yang.apm.springplugin.utils.IndexUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,7 @@ public class CalculateService {
     private CacheService cacheService;
 
     @Autowired
-    private PersistentIntegerCacheService persistentIntegerCacheService;
-
+    private IntervalWindowMappingService intervalWindowMappingService;
     @Autowired
     private ElasticsearchClientManager elasticsearchClientManager;
 
@@ -63,7 +63,7 @@ public class CalculateService {
             });
         });
 
-        String externalMetricsHistoryIndex = IndexUtil.getExternalMetricsIndex(persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
+        String externalMetricsHistoryIndex = IndexUtil.getExternalMetricsIndex(intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
 
         //将数据存储到本地，然后统一发送， 不然数据发送失败 数据就消失了
         elasticsearchClientManager.bulkData2Index(externalMetricsHistoryIndex, historyCalList);
@@ -159,7 +159,7 @@ public class CalculateService {
         result.setPodName(externalMetricsResList.get(0).getPodName());
 
         //获取窗口大小,若是收集到的数据还不足用户设置的大小,那么窗口设置为实际大小
-        result.setInterval(Math.min(persistentIntegerCacheService.get(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY),persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY)));
+        result.setInterval(Math.min(intervalWindowMappingService.getValueByName(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY),intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY)));
         Date endTime = externalMetricsResList.get(0).getEndTime();
         // Convert Date to LocalDateTime
         LocalDateTime localEndTime = endTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();

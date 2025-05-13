@@ -1,7 +1,8 @@
 package com.yang.apm.springplugin.controller;
 
 import com.yang.apm.springplugin.model.ResponseDTO;
-import com.yang.apm.springplugin.services.PersistentIntegerCacheService;
+import com.yang.apm.springplugin.pojo.IntervalWindowMapping;
+import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import static com.yang.apm.springplugin.constant.ConstantUtil.TIME_WINDOW_OF_DYN
 public class APIController {
 
     @Autowired
-    private PersistentIntegerCacheService persistentIntegerCacheService;
+    private IntervalWindowMappingService intervalWindowMappingService;
 
     @GetMapping("/health")
     @Operation(description = "提供健康检查")
@@ -23,7 +24,10 @@ public class APIController {
 
     @PostMapping("interval-update")
     public ResponseDTO<String> setInterval4Dynamic(@RequestParam("interval") Integer interval){
-        persistentIntegerCacheService.put(INTERVAL_OF_DYNAMIC_KEY, interval);
+        IntervalWindowMapping intervalWindowMapping = new IntervalWindowMapping();
+        intervalWindowMapping.setName(INTERVAL_OF_DYNAMIC_KEY);
+        intervalWindowMapping.setValue(interval);
+        intervalWindowMappingService.save(intervalWindowMapping);
         return ResponseDTO.success("时间间隔设置成功");
     }
 
@@ -31,7 +35,9 @@ public class APIController {
     @PostMapping("time-window-update")
     @Operation(description = "设置进行历史数据统计的时间窗口大小,默认10min")
     public ResponseDTO<String> setTimeWindow4Dynamic(@RequestParam("timeWindow") Integer timeWindow){
-        persistentIntegerCacheService.put(TIME_WINDOW_OF_DYNAMIC_KEY, timeWindow);
+        IntervalWindowMapping intervalWindowMapping = new IntervalWindowMapping();
+        intervalWindowMapping.setName(TIME_WINDOW_OF_DYNAMIC_KEY);
+        intervalWindowMapping.setValue(timeWindow);
         return ResponseDTO.success("时间窗口设置成功");
     }
 

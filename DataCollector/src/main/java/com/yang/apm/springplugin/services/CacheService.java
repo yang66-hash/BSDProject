@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
+import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -29,7 +29,7 @@ public class CacheService {
      */
 
     @Autowired
-    private PersistentIntegerCacheService persistentIntegerCacheService;
+    private IntervalWindowMappingService intervalWindowMappingService;
 
     private final ConcurrentHashMap<
             String,
@@ -54,7 +54,7 @@ public class CacheService {
 
         for(T sr: svcResList) {
             //构造第二层的key
-            Integer expiredTime = persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
+            Integer expiredTime = intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
             String serviceInterval = sr.getServiceName() + "|" + sr.getInterval();
             var podCache = byDataType.computeIfAbsent(
                     serviceInterval,
@@ -165,7 +165,7 @@ public class CacheService {
             return Collections.emptySet();
         }
         Set<String> keySet = byDataType.keySet();
-        int interval = persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
+        int interval = intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
         //过滤数据，只获取当前数据收集时间窗口的正常数据
         Set<String> filteredKeySet = keySet.stream().filter(sr -> sr.endsWith("|" + interval)).collect(Collectors.toSet());
         return filteredKeySet;

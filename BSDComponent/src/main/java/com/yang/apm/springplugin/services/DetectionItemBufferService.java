@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
+import com.yang.apm.springplugin.manager.BSDESClientManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -26,7 +26,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class DetectionItemBufferService {
 
     @Autowired
-    private ElasticsearchClientManager elasticsearchClientManager;
+    private BSDESClientManager BSDESClientManager;
 
     private final LinkedBlockingDeque<DetectionResItem> buffer = new LinkedBlockingDeque<>(100);
 
@@ -63,7 +63,7 @@ public class DetectionItemBufferService {
         }
 
         try {
-            elasticsearchClientManager.getElasticsearchClient().bulk(builder.build());
+            BSDESClientManager.getElasticsearchClient().bulk(builder.build());
         } catch (IOException e) {
             buffer.addAll(batch);
             log.error("Bulk API Failed, data were resent to blocking queue. Try again later.", e);

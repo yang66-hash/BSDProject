@@ -2,17 +2,11 @@ server:
   port: 8091
 
 spring:
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
-      timeout: 6000
-      lettuce:
-        pool:
-          max-active: 8 # 以下四个设置参数都是默认值
-          max-idle: 8
-          min-idle: 0
-          max-wait: -1ms
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/data_collector_db?autoReconnect=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
   elasticsearch:
     username: elastic
     password: 9vtbDG3w0Dwrg0crH26x

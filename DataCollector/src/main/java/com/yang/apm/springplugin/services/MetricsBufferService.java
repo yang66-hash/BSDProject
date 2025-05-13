@@ -1,24 +1,17 @@
 package com.yang.apm.springplugin.services;
 
 import co.elastic.clients.elasticsearch.core.BulkRequest;
-import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
+import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +28,7 @@ public class MetricsBufferService {
     //直接定义一个阻塞队列的map，用于存储各类数据，key就是index的文件名 value为阻塞队列
     private final ConcurrentHashMap<String, LinkedBlockingDeque<SvcRes>> bufferMap = new ConcurrentHashMap<>();
     @Autowired
-    private PersistentIntegerCacheService persistentIntegerCacheService;
+    private IntervalWindowMappingService intervalWindowMappingService;
     @Autowired
     private TaskScheduler taskScheduler;
 
@@ -51,7 +44,7 @@ public class MetricsBufferService {
     }
 
     private void scheduledNext(){
-        int interval = persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
+        int interval = intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
         //动态的定时调度
         future = taskScheduler.schedule(this::sendItem2ES, new Date(System.currentTimeMillis() + interval*1000));
     }

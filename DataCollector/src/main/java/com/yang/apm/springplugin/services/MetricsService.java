@@ -9,7 +9,7 @@ import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMMemInfo;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMSummaryInfo;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
 import com.yang.apm.springplugin.utils.APPMetricsUtil;
-import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
+import com.yang.apm.springplugin.utils.ElasticSearchQueryUtil;
 import com.yang.apm.springplugin.utils.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class MetricsService {
     private static final Integer MAX_RECORD_VALUE = 1000;
 
     @Autowired
-    private ElasticSearchQueryManager elasticSearchQueryManager;
+    private ESQueryService ESQueryService;
 
     /**
      * 用于获取指定微服务的指标数据,并将数据写入redis中，设置过期时间expiredTime为45s.
@@ -45,13 +45,13 @@ public class MetricsService {
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             log.info("fetching metrics from {} to {}",startTime,endTime);
 
-            Query rangeQuery = elasticSearchQueryManager.createTimeRangeQuery("@timestamp", startTime, endTime);
-            Query jvmQuery = elasticSearchQueryManager.createAllExistQuery("jvm","system","service.name");
-            Query jvmMemQuery = elasticSearchQueryManager.createOneExistQuery("jvm.memory.heap.pool","jvm.memory.non_heap.pool");
-            Query jvmGCQuery = elasticSearchQueryManager.createAllExistQuery("jvm.gc.count");
-            Query summaryCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery,jvmQuery);
-            Query memCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery,jvmMemQuery);
-            Query gcCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery,jvmGCQuery);
+            Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
+            Query jvmQuery = ElasticSearchQueryUtil.createAllExistQuery("jvm","system","service.name");
+            Query jvmMemQuery = ElasticSearchQueryUtil.createOneExistQuery("jvm.memory.heap.pool","jvm.memory.non_heap.pool");
+            Query jvmGCQuery = ElasticSearchQueryUtil.createAllExistQuery("jvm.gc.count");
+            Query summaryCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery,jvmQuery);
+            Query memCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery,jvmMemQuery);
+            Query gcCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery,jvmGCQuery);
 
 
             SearchRequest summaryRequest = new SearchRequest.Builder()
@@ -79,15 +79,15 @@ public class MetricsService {
                     .build();
             List<SvcMetricsRes> svcMetricsResList = new ArrayList<>();
             //获取总结性条目
-            List<APPJVMSummaryInfo> appSummaryList = elasticSearchQueryManager.executeSearch(summaryRequest, APPJVMSummaryInfo.class);
+            List<APPJVMSummaryInfo> appSummaryList = ESQueryService.executeSearch(summaryRequest, APPJVMSummaryInfo.class);
             APPMetricsUtil.dealWithSummaryData(svcMetricsResList, appSummaryList,startTime,endTime,interval);
 
             //获取jvm gc详细条目
-            List<APPJVMGCInfo> appjvmgcInfoList = elasticSearchQueryManager.executeSearch(gcRequest, APPJVMGCInfo.class);
+            List<APPJVMGCInfo> appjvmgcInfoList = ESQueryService.executeSearch(gcRequest, APPJVMGCInfo.class);
             APPMetricsUtil.dealWithGCData(svcMetricsResList,appjvmgcInfoList);
 
             //获取jvm mem详细条目
-            List<APPJVMMemInfo> appjvmMemInfoList = elasticSearchQueryManager.executeSearch(memRequest, APPJVMMemInfo.class);
+            List<APPJVMMemInfo> appjvmMemInfoList = ESQueryService.executeSearch(memRequest, APPJVMMemInfo.class);
             APPMetricsUtil.dealWithMemData(svcMetricsResList, appjvmMemInfoList);
 
             return svcMetricsResList;

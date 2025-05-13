@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class ElasticsearchClientManager {
+public class BSDESClientManager {
 
     @Autowired
     private ElasticsearchSettings elasticsearchSettings;

@@ -6,6 +6,7 @@ import com.yang.apm.springplugin.constant.ConstantUtil;
 
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.services.TraceService;
+import com.yang.apm.springplugin.services.ESQueryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,13 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class ElasticsearchClientManagerTest {
 
     @Autowired
     private ElasticsearchClientManager elasticsearchClientManager;
+
+    @Autowired
+    private ESQueryService ESQueryService;
 
     @Autowired
     private TraceService traceService;
@@ -85,4 +87,7 @@ class ElasticsearchClientManagerTest {
         boolean indexExisted = elasticsearchClientManager.isIndexExisted(ConstantUtil.METRICS_EXTERNAL_INDEX_PREFIX + ".1min");
         System.out.println(indexExisted);
     }
+
+
+
 }

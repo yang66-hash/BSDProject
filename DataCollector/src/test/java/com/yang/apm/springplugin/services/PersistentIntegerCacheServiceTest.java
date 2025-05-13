@@ -1,6 +1,7 @@
 package com.yang.apm.springplugin.services;
 
 import com.yang.apm.springplugin.constant.ConstantUtil;
+import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,43 +10,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 class PersistentIntegerCacheServiceTest {
 
     @Autowired
-    private PersistentIntegerCacheService persistentIntegerCacheService;
+    private IntervalWindowMappingService intervalWindowMappingService;
 
     @Test
     public void putInterval() {
-
         System.out.println(System.getProperty("user.dir"));
-
-//        persistentIntegerCacheService.put(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY,60);
     }
 
     @Test
     public void putWindow() {
-        persistentIntegerCacheService.put(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY,600);
+        intervalWindowMappingService.setValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY,600);
     }
     @Test
     public void putCurWindow() {
-        persistentIntegerCacheService.put(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY,60);
+        intervalWindowMappingService.setValueByName(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY,60);
     }
 
-    @Test
-    public void delInterval() {
-        persistentIntegerCacheService.delete(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
-    }
-
-    @Test
-    public void delWindow() {
-        persistentIntegerCacheService.delete(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
-    }
-    @Test
-    public void delCurWindow() {
-        persistentIntegerCacheService.delete(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY);
-    }
     @Test
     public void get() {
-        System.out.println(persistentIntegerCacheService.get(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY));
-        System.out.println(persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY));
-        System.out.println(persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
+        System.out.println(intervalWindowMappingService.getValueByName(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY));
+        System.out.println(intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY));
+        System.out.println(intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
     }
 
 }

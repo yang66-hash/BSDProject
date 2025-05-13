@@ -112,7 +112,6 @@ public class APPMetricsUtil {
                 .collect(Collectors.toList()), appjvmMemInfo -> generateUniqueNote(appjvmMemInfo.getService()));
 
         System.out.println(heapMap.toString());
-        System.out.println("=======================================");
 
         Map<String, List<APPJVMMemInfo>> nonHeapMap = groupByServiceInstance(appjvmMemInfoList.stream()
                 .filter(info -> info.getJvmMemInfo().getMemory().getNonHeap() != null)

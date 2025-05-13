@@ -7,7 +7,7 @@ import com.yang.apm.springplugin.expection.ServiceException;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcTransRes;
 import com.yang.apm.springplugin.pojo.traces.TraceServiceInfo;
-import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
+import com.yang.apm.springplugin.utils.ElasticSearchQueryUtil;
 import com.yang.apm.springplugin.utils.TimeUtil;
 import com.yang.apm.springplugin.utils.TransactionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class TraceService {
 
 
     @Autowired
-    private ElasticSearchQueryManager elasticSearchQueryManager;
+    private ESQueryService ESQueryService;
 
 
     public List<SvcExternalMetricsRes> getMetricsInTraces(String endTimeString, Integer interval) {
@@ -44,9 +44,9 @@ public class TraceService {
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             log.info("fetching traces from {} to {}",startTime,endTime);
 
-            Query rangeQuery = elasticSearchQueryManager.createTimeRangeQuery("@timestamp", startTime, endTime);
-            Query booleanQuery = elasticSearchQueryManager.createAllExistQuery("transaction.id");
-            Query allCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery, booleanQuery);
+            Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
+            Query booleanQuery = ElasticSearchQueryUtil.createAllExistQuery("transaction.id");
+            Query allCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery, booleanQuery);
             SearchRequest request = new SearchRequest.Builder()
                     .index(TRACE_INDEX_NAME)
                     .query(allCombinedQuery)
@@ -54,7 +54,7 @@ public class TraceService {
                     .size(MAX_RECORD_VALUE)
                     .sort(sort-> sort.field(f-> f.field("@timestamp").order(SortOrder.Asc)))
                     .build();
-            List<TraceServiceInfo> traceServiceInfoList = elasticSearchQueryManager.executeSearch(request, TraceServiceInfo.class);
+            List<TraceServiceInfo> traceServiceInfoList = ESQueryService.executeSearch(request, TraceServiceInfo.class);
 
             log.info("收集到的traces条数:{}", traceServiceInfoList.size());
             log.info("收集到的traces:{}", traceServiceInfoList);
@@ -84,9 +84,9 @@ public class TraceService {
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             log.info("fetching traces from {} to {}",startTime,endTime);
 
-            Query rangeQuery = elasticSearchQueryManager.createTimeRangeQuery("@timestamp", startTime, endTime);
-            Query booleanQuery = elasticSearchQueryManager.createAllExistQuery("transaction.id");
-            Query allCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery, booleanQuery);
+            Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
+            Query booleanQuery = ElasticSearchQueryUtil.createAllExistQuery("transaction.id");
+            Query allCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery, booleanQuery);
             SearchRequest request = new SearchRequest.Builder()
                     .index(TRACE_INDEX_NAME)
                     .query(allCombinedQuery)
@@ -94,7 +94,7 @@ public class TraceService {
                     .size(MAX_RECORD_VALUE)
                     .sort(sort-> sort.field(f-> f.field("@timestamp").order(SortOrder.Asc)))
                     .build();
-            List<TraceServiceInfo> traceServiceInfoList = elasticSearchQueryManager.executeSearch(request, TraceServiceInfo.class);
+            List<TraceServiceInfo> traceServiceInfoList = ESQueryService.executeSearch(request, TraceServiceInfo.class);
 
             log.info("收集到的traces条数:{}", traceServiceInfoList.size());
             log.info("收集到的traces:{}", traceServiceInfoList);

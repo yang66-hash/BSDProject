@@ -21,6 +21,7 @@ public class ConstantUtil {
     //用于数据external metrics的存储分为windows 和 interval 两部分数据
     public static final String METRICS_EXTERNAL_INDEX_PREFIX = "bsd.analysis.metrics.external";
 
+    public static final Integer MAX_INSTANCE_NUM  =  100;
 //    //不同的JVM使用可能使用不同的垃圾回收器 同时不同JDK版本 默认的JVM GC也有所不同
 //    public final static String OLD_GENERATION = "Old Generation";
 //    public final static String YOUNG_GENERATION = "Young Generation";

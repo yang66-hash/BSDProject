@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.BulkResponse;
 import co.elastic.clients.elasticsearch.core.IndexRequest;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
@@ -19,7 +20,6 @@ import com.yang.apm.springplugin.pojo.ElasticsearchSettings;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
-import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
@@ -35,8 +35,6 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
-
-import static org.bouncycastle.asn1.cms.CMSObjectIdentifiers.data;
 
 @Component
 @Slf4j
@@ -163,13 +161,16 @@ public class ElasticsearchClientManager {
             BulkRequest.Builder builder;
             if (data.get(0) instanceof SvcExternalMetricsRes){
                 builder = constructBulkOps(indexName, data, SvcExternalMetricsRes.class);
-                elasticsearchClient.bulk(builder.build());
-                log.info("External metrics of service were collected and  sent to ES successfully.");
+                BulkResponse bulk = elasticsearchClient.bulk(builder.build());
+                if (!bulk.errors())
+                    log.info("External metrics of service were collected and  sent to ES successfully.");
+                else log.error("External metrics of service were collected and sent to ES failed.");
 
             }
             if (data.get(0) instanceof SvcMetricsRes){
                 builder = constructBulkOps(indexName, data, SvcMetricsRes.class);
                 elasticsearchClient.bulk(builder.build());
+
                 log.info("Metrics of service were collected and  sent to ES successfully.");
             }
             //有待扩展

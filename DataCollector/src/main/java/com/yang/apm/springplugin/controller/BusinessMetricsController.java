@@ -9,7 +9,8 @@ import com.yang.apm.springplugin.model.ResponseDTO;
 import com.yang.apm.springplugin.pojo.metrics.business.SpringBusinessInfo;
 import com.yang.apm.springplugin.pojo.result.business.BusinessMetricsRes;
 import com.yang.apm.springplugin.utils.APPBusinessMetricsUtil;
-import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
+import com.yang.apm.springplugin.services.ESQueryService;
+import com.yang.apm.springplugin.utils.ElasticSearchQueryUtil;
 import com.yang.apm.springplugin.utils.TimeUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ public class BusinessMetricsController {
 
     private static final Logger logger = LoggerFactory.getLogger(BusinessMetricsController.class);
     @Autowired
-    private ElasticSearchQueryManager elasticSearchQueryManager;
+    private ESQueryService ESQueryService;
 
     /**
      * @param endTimeString 资源获取时间末点
@@ -60,12 +61,12 @@ public class BusinessMetricsController {
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             logger.info("fetching metrics from {} to {}",startTime,endTime);
 
-            Query rangeQuery = elasticSearchQueryManager.createTimeRangeQuery("@timestamp", startTime, endTime);
-            Query filterQuery = elasticSearchQueryManager.createAllExistQuery("labels.method","method_call_counter");
-            Query gtRangeQuery = elasticSearchQueryManager.createGTRangeQuery("method_call_counter", 0);
-            Query serviceQuery = elasticSearchQueryManager.createMatchQuery("service.name", serviceName);
+            Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
+            Query filterQuery = ElasticSearchQueryUtil.createAllExistQuery("labels.method","method_call_counter");
+            Query gtRangeQuery = ElasticSearchQueryUtil.createGTRangeQuery("method_call_counter", 0);
+            Query serviceQuery = ElasticSearchQueryUtil.createMatchQuery("service.name", serviceName);
 
-            Query summaryCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery, filterQuery, gtRangeQuery , serviceQuery);
+            Query summaryCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery, filterQuery, gtRangeQuery , serviceQuery);
 
             SearchRequest request = new SearchRequest.Builder()
                     .index(".ds-metrics-apm.app.*")
@@ -77,7 +78,7 @@ public class BusinessMetricsController {
 
             List<BusinessMetricsRes> businessMetricsResList = new ArrayList<>();
             //获取总结性条目
-            List<SpringBusinessInfo> springBusinessInfoList = elasticSearchQueryManager.executeSearch(request, SpringBusinessInfo.class);
+            List<SpringBusinessInfo> springBusinessInfoList = ESQueryService.executeSearch(request, SpringBusinessInfo.class);
             APPBusinessMetricsUtil.dealWithBusinessData(businessMetricsResList, springBusinessInfoList,startTime,endTime,interval);
 
 

@@ -8,7 +8,8 @@ import com.yang.apm.springplugin.expection.ServiceException;
 import com.yang.apm.springplugin.model.ResponseDTO;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.traces.TraceServiceInfo;
-import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
+import com.yang.apm.springplugin.services.ESQueryService;
+import com.yang.apm.springplugin.utils.ElasticSearchQueryUtil;
 import com.yang.apm.springplugin.utils.TimeUtil;
 import com.yang.apm.springplugin.utils.TransactionUtils;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +34,7 @@ public class TraceController {
     private static final Logger logger = LoggerFactory.getLogger(TraceController.class);
 
     @Autowired
-    private ElasticSearchQueryManager elasticSearchQueryManager;
+    private ESQueryService ESQueryService;
 
     /**
      * @param endTimeString 资源获取时间末点
@@ -57,7 +58,7 @@ public class TraceController {
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             logger.info("fetching traces from {} to {}",startTime,endTime);
 
-            Query rangeQuery = elasticSearchQueryManager.createTimeRangeQuery("@timestamp", startTime, endTime);
+            Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
 
             SearchRequest request = new SearchRequest.Builder()
                     .index(".ds-traces-apm*")
@@ -65,7 +66,7 @@ public class TraceController {
                     .size(5000)
                     .sort(sort-> sort.field(f-> f.field("@timestamp").order(SortOrder.Asc)))
                     .build();
-            List<TraceServiceInfo> traceServiceInfoList = elasticSearchQueryManager.executeSearch(request, TraceServiceInfo.class);
+            List<TraceServiceInfo> traceServiceInfoList = ESQueryService.executeSearch(request, TraceServiceInfo.class);
 
             logger.info("收集到的traces条数:{}", traceServiceInfoList.size());
             logger.info("收集到的traces:{}", traceServiceInfoList);

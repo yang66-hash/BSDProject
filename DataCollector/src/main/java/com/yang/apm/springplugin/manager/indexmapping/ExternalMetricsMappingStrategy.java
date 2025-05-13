@@ -1,5 +1,6 @@
 package com.yang.apm.springplugin.manager.indexmapping;
 
+import co.elastic.clients.elasticsearch._types.mapping.DynamicMapping;
 import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import co.elastic.clients.util.ObjectBuilder;
 
@@ -9,7 +10,10 @@ public class ExternalMetricsMappingStrategy implements IndexMappingStrategy{
     @Override
     public Function<TypeMapping.Builder, ObjectBuilder<TypeMapping>> createMapping() {
         return mappings -> mappings
-                .properties("timestamp",p->p.date(d->d.format("strict_date_time")))
+                //设置无需动态推断字段类型
+                .dynamic(DynamicMapping.False)
+                .properties("startTime",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
+                .properties("endTime",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
                 .properties("interval",p->p.keyword(k->k))
                 .properties("language",p->p.keyword(k->k))
                 .properties("serviceName",p->p.keyword(k->k))

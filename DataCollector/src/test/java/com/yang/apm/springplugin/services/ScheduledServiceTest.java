@@ -3,12 +3,11 @@ package com.yang.apm.springplugin.services;
 import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.manager.ElasticsearchClientManager;
 import com.yang.apm.springplugin.manager.indexmapping.ExternalMetricsMappingStrategy;
+import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import com.yang.apm.springplugin.utils.IndexUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = com.yang.apm.springplugin.DataCollectApplication.class)
 class ScheduledServiceTest {
@@ -17,7 +16,7 @@ class ScheduledServiceTest {
     private ScheduledService scheduledService;
 
     @Autowired
-    private PersistentIntegerCacheService persistentIntegerCacheService;
+    private IntervalWindowMappingService intervalWindowMappingService;
 
     @Autowired
     private ElasticsearchClientManager elasticsearchClientManager;
@@ -30,8 +29,8 @@ class ScheduledServiceTest {
 
     @Test
     public void createIndexByStrategyTest(){
-        Integer interval = persistentIntegerCacheService.get(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
-        Integer timeWindow = persistentIntegerCacheService.get(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
+        Integer interval = intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
+        Integer timeWindow = intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
 
         String externalMetricsIndex = IndexUtil.getExternalMetricsIndex(interval);
         String externalMetricsHistoryIndex = IndexUtil.getExternalMetricsIndex(timeWindow);

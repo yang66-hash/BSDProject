@@ -28,7 +28,7 @@ public interface IDetectConvert {
         //设置ISO 8601格式日期
         Date time = new Date();
         TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'");
         df.setTimeZone(tz);
         detectionResItem.setTimestamp(df.format(time));
         detectionResItem.setContext(context);

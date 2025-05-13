@@ -11,7 +11,8 @@ import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMMemInfo;
 import com.yang.apm.springplugin.pojo.metrics.jvm.last.APPJVMSummaryInfo;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
 import com.yang.apm.springplugin.utils.APPMetricsUtil;
-import com.yang.apm.springplugin.utils.ElasticSearchQueryManager;
+import com.yang.apm.springplugin.services.ESQueryService;
+import com.yang.apm.springplugin.utils.ElasticSearchQueryUtil;
 import com.yang.apm.springplugin.utils.TimeUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +36,7 @@ public class InternalMetricsController {
 
     private static final Logger logger = LoggerFactory.getLogger(InternalMetricsController.class);
     @Autowired
-    private ElasticSearchQueryManager elasticSearchQueryManager;
+    private ESQueryService ESQueryService;
 
     /**
      * @param endTimeString 资源获取时间末点
@@ -60,15 +61,15 @@ public class InternalMetricsController {
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             logger.info("fetching metrics from {} to {}",startTime,endTime);
             
-            Query rangeQuery = elasticSearchQueryManager.createTimeRangeQuery("@timestamp", startTime, endTime);
-            Query serviceQuery = elasticSearchQueryManager.createMatchQuery("service.name", serviceName);
-            Query jvmQuery = elasticSearchQueryManager.createAllExistQuery("jvm","system");
-            Query jvmMemQuery = elasticSearchQueryManager.createOneExistQuery("jvm.memory.heap.pool","jvm.memory.non_heap.pool");
-            Query jvmGCQuery = elasticSearchQueryManager.createAllExistQuery("jvm.gc.count");
+            Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
+            Query serviceQuery = ElasticSearchQueryUtil.createMatchQuery("service.name", serviceName);
+            Query jvmQuery = ElasticSearchQueryUtil.createAllExistQuery("jvm","system");
+            Query jvmMemQuery = ElasticSearchQueryUtil.createOneExistQuery("jvm.memory.heap.pool","jvm.memory.non_heap.pool");
+            Query jvmGCQuery = ElasticSearchQueryUtil.createAllExistQuery("jvm.gc.count");
 
-            Query summaryCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery,serviceQuery,jvmQuery);
-            Query memCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery,serviceQuery,jvmMemQuery);
-            Query gcCombinedQuery = elasticSearchQueryManager.createAllCombinedQuery(rangeQuery,serviceQuery,jvmGCQuery);
+            Query summaryCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery,serviceQuery,jvmQuery);
+            Query memCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery,serviceQuery,jvmMemQuery);
+            Query gcCombinedQuery = ElasticSearchQueryUtil.createAllCombinedQuery(rangeQuery,serviceQuery,jvmGCQuery);
             
 
             SearchRequest summaryRequest = new SearchRequest.Builder()
@@ -96,15 +97,15 @@ public class InternalMetricsController {
                     .build();
             List<SvcMetricsRes> svcMetricsResList = new ArrayList<>();
             //获取总结性条目
-            List<APPJVMSummaryInfo> appSummaryList = elasticSearchQueryManager.executeSearch(summaryRequest, APPJVMSummaryInfo.class);
+            List<APPJVMSummaryInfo> appSummaryList = ESQueryService.executeSearch(summaryRequest, APPJVMSummaryInfo.class);
             APPMetricsUtil.dealWithSummaryData(svcMetricsResList, appSummaryList,startTime,endTime,interval);
 
             //获取jvm gc详细条目
-            List<APPJVMGCInfo> appjvmgcInfoList = elasticSearchQueryManager.executeSearch(gcRequest, APPJVMGCInfo.class);
+            List<APPJVMGCInfo> appjvmgcInfoList = ESQueryService.executeSearch(gcRequest, APPJVMGCInfo.class);
             APPMetricsUtil.dealWithGCData(svcMetricsResList,appjvmgcInfoList);
 
             //获取jvm mem详细条目
-            List<APPJVMMemInfo> appjvmMemInfoList = elasticSearchQueryManager.executeSearch(memRequest, APPJVMMemInfo.class);
+            List<APPJVMMemInfo> appjvmMemInfoList = ESQueryService.executeSearch(memRequest, APPJVMMemInfo.class);
             APPMetricsUtil.dealWithMemData(svcMetricsResList, appjvmMemInfoList);
 
             return ResponseDTO.success(svcMetricsResList);
