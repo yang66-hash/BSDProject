@@ -21,8 +21,8 @@ public class SvcTransRes extends SvcRes {
     /**
      * record the number of API calls and the tree structure of the chain requests between this interval
      */
-    @Schema(description = "当前服务实例在当前时间间隔内的所有请求链路以及相关API的调用次数")
-    private List<RequestChain> requestChainList;
+    @Schema(description = "当前服务实例在当前时间间隔内的存在循环依赖的请求链路以及相关API的调用次数（单条请求链路）")
+    private RequestChain requestChain;
 
 
 

@@ -50,7 +50,8 @@ public class ESService {
                     .sterms()
                     .buckets()
                     .array();
-
+            System.out.println(byPodNameBuckets.size());
+            System.out.println(byPodNameBuckets);
             // 处理每个 podName 的聚合结果
             for (StringTermsBucket bucket : byPodNameBuckets) {
                 Hit<JsonData> latestHit = bucket.aggregations().get("latest_hits").topHits().hits().hits().get(0);
@@ -68,6 +69,10 @@ public class ESService {
         }
         return result;
     }
+
+
+
+
 
     /**
      * 构建搜索请求

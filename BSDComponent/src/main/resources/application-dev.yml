@@ -20,8 +20,8 @@ spring:
           max-wait: -1ms
   elasticsearch:
     username: elastic
-    password: 9vtbDG3w0Dwrg0crH26x
-    uris: "http://118.25.105.124:9200"
+    password: s8EO3qqtZIvEniAaGO67
+    uris: "http://123.60.48.99:9200"
     socket-timeout: "10s"
   jackson:
     deserialization:

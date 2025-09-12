@@ -43,21 +43,6 @@ public class SvcExternalMetricsRes extends SvcRes{
     private Double avgLatency;
 
     /**
-     * record requests in per minute
-     * from startTime to endTime, record requests number per minute
-     * The interval format is inclusive of the left boundary and exclusive of the right boundary, denoted as [left, right)
-     */
-    @Schema(description = "时间间隔内每分钟的请求吞吐量（record requests in per minute），[startTime, endTime)")
-    private double[] throughput;
-
-    /**
-     * record successful requests in per minute
-     *
-     */
-    @Schema(description = "时间间隔内每分钟有效吞吐量（统计每分钟的成功请求次数），[startTime, endTime)")
-    private double[] sucThroughput;
-
-    /**
      * record call number of every API in this instance(service)
      * key: APIName recorded in Transaction
      * value: call number
@@ -104,8 +89,6 @@ public class SvcExternalMetricsRes extends SvcRes{
                 ", resClientFailCount=" + resClientFailCount +
                 ", failPercent=" + failPercent +
                 ", avgLatency=" + avgLatency +
-                ", throughput=" + Arrays.toString(throughput) +
-                ", sucThroughput=" + Arrays.toString(sucThroughput) +
                 ", instanceAPICallNumMap=" + instanceAPICallNumMap +
                 ", APIExecTimeMap=" + APIExecTimeMap +
                 ", sqlQueryCount=" + sqlQueryCount +

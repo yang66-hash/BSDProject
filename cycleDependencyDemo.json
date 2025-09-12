@@ -1,0 +1,76 @@
+[
+  {
+    "endTime": "2025-09-12 15:43:43",
+    "interval": 300,
+    "language": "Java",
+    "podName": "win-20230627bhi",
+    "requestChainList": [
+      {
+        "aPIName": "UserController#startCycleCall",
+        "chain": {
+          "aPIName": "UserController#startCycleCall",
+          "containSQL": false,
+          "serviceName": "Java|cloud-user-service|win-20230627bhi",
+          "subNodes": [
+            {
+              "aPIName": "HouseController#cycleStep2",
+              "containSQL": true,
+              "serviceName": "Java|cloud-house-service|win-20230627bhi",
+              "sqlModelList": [
+                {
+                  "dataQueryNum": 1,
+                  "dbFurType": "mysql",
+                  "dbType": "sql",
+                  "execTime": 62920,
+                  "instance": "property_db_cloud",
+                  "statement": "SELECT id,parent_building,parent_unit,parent_floor,house_num,house_size,house_type,is_sold,user_id,owner_id FROM house WHERE id=?"
+                }
+              ],
+              "subNodes": [
+                {
+                  "aPIName": "PropertyController#cycleStep3",
+                  "containSQL": false,
+                  "serviceName": "Java|cloud-property-service|win-20230627bhi",
+                  "subNodes": [
+                    {
+                      "aPIName": "AdminController#cycleStep4",
+                      "containSQL": true,
+                      "serviceName": "Java|cloud-admin-service|win-20230627bhi",
+                      "sqlModelList": [
+                        {
+                          "dataQueryNum": 1,
+                          "dbFurType": "mysql",
+                          "dbType": "sql",
+                          "execTime": 50597,
+                          "instance": "property_db_cloud",
+                          "statement": "SELECT  id,user_name,login_name,password  FROM admin"
+                        }
+                      ],
+                      "subNodes": [
+                        {
+                          "aPIName": "UserController#completeCycleCall",
+                          "containSQL": false,
+                          "serviceName": "Java|cloud-user-service|win-20230627bhi",
+                          "subNodes": [
+
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "sourceSvc": "Java|cloud-user-service|win-20230627bhi",
+        "targetSvcNumMap": {
+          "Java|cloud-house-service|win-20230627bhi|HouseController#cycleStep2": 1
+        },
+        "traceId": "c1e34ec717951e3be1c006bde1422ce2"
+      }
+    ],
+    "serviceName": "cloud-user-service",
+    "startTime": "2025-09-12 15:38:43"
+  }
+]

@@ -119,6 +119,16 @@
             <artifactId>commons</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>3.2.4</version>
+        </dependency>
     </dependencies>
 
 

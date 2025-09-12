@@ -18,7 +18,7 @@ class ESServiceTest {
 
     @Test
     void getExternalMetrics() {
-        Map<String, SvcExternalMetricsRes> externalMetrics = esService.getExternalMetrics("bsd.analysis.metrics.external.600s", "cloud-user-service");
+        Map<String, SvcExternalMetricsRes> externalMetrics = esService.getExternalMetrics("bsd.analysis.metrics.external.600s", "cloud-admin-service");
 
         System.out.println(externalMetrics);
     }

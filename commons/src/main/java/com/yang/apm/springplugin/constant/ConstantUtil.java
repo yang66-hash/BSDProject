@@ -10,8 +10,6 @@ public class ConstantUtil {
     public static final String REDIS_DETECTION_RECORD_LIST = "bs-detection-record-list";
 
 
-    public static final String ELASTIC_SEARCH_DETECTION_RES_INDEX = "bs_detection_res_set";
-
     public static final String INTERVAL_OF_DYNAMIC_KEY = "bsd_dynamic_interval";
     public static final String TIME_WINDOW_OF_DYNAMIC_KEY = "bsd_dynamic_time_window";
     public static final String INCREMENT_WINDOW_OF_DYNAMIC_KEY = "bsd_dynamic_cur_window";
@@ -20,6 +18,10 @@ public class ConstantUtil {
 
     //用于数据external metrics的存储分为windows 和 interval 两部分数据
     public static final String METRICS_EXTERNAL_INDEX_PREFIX = "bsd.analysis.metrics.external";
+    public static final String METRICS_INTERVAL_INDEX_PREFIX = "bsd.analysis.metrics.internal";
+    public static final String METRICS_BUSINESS_INDEX_PREFIX = "bsd.analysis.metrics.business";
+    public static final String CYCLE_DEPENDENCY_BUSINESS_INDEX_PREFIX = "bsd.analysis.metrics.anomalous.traces";
+    public static final String DETECTION_RESULT_INDEX = "bsd.detection.results";
 
     public static final Integer MAX_INSTANCE_NUM  =  100;
 //    //不同的JVM使用可能使用不同的垃圾回收器 同时不同JDK版本 默认的JVM GC也有所不同

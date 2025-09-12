@@ -27,10 +27,10 @@ public interface IDetectConvert {
         detectionResItem.setDetectionID(requestItem.getDetectionID());
         //设置ISO 8601格式日期
         Date time = new Date();
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'");
-        df.setTimeZone(tz);
-        detectionResItem.setTimestamp(df.format(time));
+//        TimeZone tz = TimeZone.getTimeZone("UTC");
+//        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS'Z'");
+//        df.setTimeZone(tz);
+        detectionResItem.setTimestamp(time);
         detectionResItem.setContext(context);
         detectionResItem.setStatus(context.getStatus());
     }

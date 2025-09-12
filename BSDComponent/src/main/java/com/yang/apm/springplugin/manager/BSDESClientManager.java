@@ -1,8 +1,15 @@
 package com.yang.apm.springplugin.manager;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
+import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
+import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
+import co.elastic.clients.elasticsearch.indices.ExistsRequest;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.endpoints.BooleanResponse;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
+import co.elastic.clients.util.ObjectBuilder;
+import com.yang.apm.springplugin.indexmapping.IndexMappingStrategy;
 import com.yang.apm.springplugin.pojo.ElasticsearchSettings;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -55,6 +63,60 @@ public class BSDESClientManager {
         elasticsearchClient = new ElasticsearchClient(transport);
         log.info("new elasticsearch client created...");
 
+    }
+
+    /**
+     * 创建指定的索引存储文件
+     * @param indexName 索引名称
+     * @param fn mapping properties接口函数
+     * @return
+     */
+    public boolean createIndexByName(String indexName, Function<TypeMapping.Builder, ObjectBuilder<TypeMapping>> fn) {
+        CreateIndexRequest createIndexRequest = CreateIndexRequest.of(builder -> builder
+                .index(indexName)
+                .settings(s->s
+                        .numberOfReplicas("1")
+                )
+                .mappings(fn));
+        try {
+            CreateIndexResponse createIndexResponse = elasticsearchClient.indices().create(createIndexRequest);
+            if (createIndexResponse.acknowledged() && createIndexResponse.shardsAcknowledged()){
+                log.info("Index created successfully, and the shards is active.");
+                return true;
+            }else if (createIndexResponse.acknowledged()) {
+                log.warn("Index created successfully, but some shards are not active.");
+            } else {
+                log.error("Index created failed.");
+            }
+        } catch (IOException e) {
+            log.error("create index:{} in elasticsearch for BSD failed. Error message: {}",indexName,e.getMessage());
+        }
+        return false;
+    }
+    /**
+     * @param indexName 索引文件名
+     * @param strategy 自定义的策略，用于创建external metrics等
+     * @return
+     */
+    public boolean createIndexWithStrategy(String indexName, IndexMappingStrategy strategy) {
+        Function<TypeMapping.Builder, ObjectBuilder<TypeMapping>> fn = strategy.createMapping();
+        log.info("Invoke createIndexByName in createIndexWithStrategy.");
+        return createIndexByName(indexName, fn);
+    }
+
+    /**
+     * @param indexName 索引文件名
+     * @return 判断某一个索引文件是否存在 存在返回true
+     */
+    public boolean isIndexExisted(String indexName){
+        try {
+            ExistsRequest existsRequest = ExistsRequest.of(builder -> builder.index(indexName));
+            BooleanResponse exists = elasticsearchClient.indices().exists(existsRequest);
+            return exists.value();
+        } catch (IOException e) {
+            log.error("index file in error status.error as below: {}", e.getMessage());
+            return false;
+        }
     }
 
 }

@@ -10,8 +10,15 @@ import com.yang.apm.springplugin.pojo.result.sql.DBModel;
 import com.yang.apm.springplugin.pojo.span.Span;
 import com.yang.apm.springplugin.pojo.traces.TraceServiceInfo;
 import com.yang.apm.springplugin.pojo.traces.TraceTransaction;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TransactionUtils {
@@ -27,7 +34,6 @@ public class TransactionUtils {
 
 
     public static List<SvcExternalMetricsRes> analyzeTransaction4Metrics(Map<String, List<TraceServiceInfo>> traceListMap, Date endTime, Date startTime, Integer interval) {
-
         //记录某一服务实例下所有请求的时延（包括失败）
         Map<String,List<Integer>> latencyMap = new HashMap<>();
         //记录每一个服务实例的失败请求数量（不包含客户端请求错误 4xx）
@@ -35,10 +41,6 @@ public class TransactionUtils {
         //统计客户端错误
         Map<String, Integer> clientFailRequestMap = new HashMap<>();
 
-        //记录每一个服务实例每一分钟内的吞吐量 times per minute
-        Map<String, double[]> throughPutMap = new HashMap<>();
-        //记录interval内每一分钟的有效吞吐量
-        Map<String, double[]> sucThroughPutMap = new HashMap<>();
         //记录每一服务实例API调用次数 <curSvcInstance,<APIName, APICallNum>>
         Map<String,Map<String, Integer>> APICallNumMap = new HashMap<>();
         //记录每一服务实例对其他服务的调用次数 <curSvcInstance,<calledSvcInstance, APICallNum>>
@@ -101,17 +103,10 @@ public class TransactionUtils {
                     }
 
                     //吞吐量
-                    double[] throughPutArr = new double[interval];
-                    double[] sucThroughPutArr = new double[interval];
                     long intervalToEnd = traceService.getTimeStamp().getTime() - startTime.getTime();
                     //posInArr ∈ [0,interval)
                     int posInArr = (int) (intervalToEnd/1000/60);
-                    throughPutArr[posInArr]++;
-                    if (!transaction.getResult().contains("5xx") && !transaction.getResult().contains("4xx")){
-                        sucThroughPutArr[posInArr]++;
-                    }
-                    throughPutMap.put(uniqueNote, throughPutArr);
-                    sucThroughPutMap.put(uniqueNote, sucThroughPutArr);
+
                     //API调用次数
                     Map<String, Integer> subAPICallNumMap = new HashMap<>();
                     String APIName = traceService.getTransaction().getName();
@@ -150,17 +145,10 @@ public class TransactionUtils {
                     }
 
                     //吞吐量
-                    double[] throughPutArr = throughPutMap.get(uniqueNote);
-                    double[] sucThroughPutArr = sucThroughPutMap.get(uniqueNote);
+
                     long intervalToEnd = traceService.getTimeStamp().getTime() - startTime.getTime();
                     //posInArr ∈ [0,interval)
                     int posInArr = (int) (intervalToEnd/1000/60);
-                    throughPutArr[posInArr]++;
-                    if (!transaction.getResult().contains("5xx") && !transaction.getResult().contains("4xx")){
-                        sucThroughPutArr[posInArr]++;
-                    }
-                    throughPutMap.put(uniqueNote, throughPutArr);
-                    sucThroughPutMap.put(uniqueNote, sucThroughPutArr);
 
                     //API调用次数
                     Map<String, Integer> subAPICallNumMap = APICallNumMap.get(uniqueNote);
@@ -205,8 +193,6 @@ public class TransactionUtils {
                 latencyMap,
                 serverFailRequestMap,
                 clientFailRequestMap,
-                throughPutMap,
-                sucThroughPutMap,
                 APICallNumMap,
                 serviceCallNumMap,
                 execTimeMap,
@@ -220,7 +206,11 @@ public class TransactionUtils {
     }
 
 
-
+    /**
+     * 因为trace涉及到的数据量很大，不能直接大量缓存在本地，而是直接设计每分钟获取每一个interval中的数据，进行结果分析
+     * 或者允许设置采样率去控制采样trace的占比
+     * 返回对应的结果信息
+     */
     public static List<SvcTransRes> analyzeTransaction4Trace(Map<String, List<TraceServiceInfo>> traceListMap, Date endTime, Date startTime, Integer interval){
         //记录每一服务实例下每一条链路的相关信息 整条trace记录在请求头所在服务实例下
         Map<String, List<RequestChain>> requestChainMap = new HashMap<>();
@@ -253,18 +243,22 @@ public class TransactionUtils {
         //处理链路信息
 
         //链路具体调用情况
-        requestChainMap.forEach((uniqueNote,requestChain) -> {
+        requestChainMap.forEach((uniqueNote, requestChainList) -> {
             String[] strings = uniqueNote.split("\\|");
             System.out.println(Arrays.toString(strings));
-            SvcTransRes svcTransRes = new SvcTransRes();
-            svcTransRes.setStartTime(startTime);
-            svcTransRes.setEndTime(endTime);
-            svcTransRes.setInterval(interval);
-            svcTransRes.setLanguage(strings[0]);
-            svcTransRes.setServiceName(strings[1]);
-            svcTransRes.setPodName(strings[2]);
-            svcTransRes.setRequestChainList(requestChain);
-            list.add(svcTransRes);
+            
+            // 为每个 RequestChain 创建一个 SvcTransRes
+            requestChainList.forEach(chain -> {
+                SvcTransRes svcTransRes = new SvcTransRes();
+                svcTransRes.setStartTime(startTime);
+                svcTransRes.setEndTime(endTime);
+                svcTransRes.setInterval(interval);
+                svcTransRes.setLanguage(strings[0]);
+                svcTransRes.setServiceName(strings[1]);
+                svcTransRes.setPodName(strings[2]);
+                svcTransRes.setRequestChain(chain); // 设置单个 RequestChain
+                list.add(svcTransRes);
+            });
         });
         return list;
     }
@@ -329,8 +323,6 @@ public class TransactionUtils {
      * @param latencyMap           计算延迟
      * @param serverFailRequestMap 计算请求失败率 5xx
      * @param clientFailRequestMap 4xx
-     * @param throughPutMap        吞吐量
-     * @param sucThroughPutMap     有效吞吐量
      * @param apiCallNumMap        每一个服务实例下被调用的API的调用次数
      * @param serviceCallNumMap    调用其他服务的次数
      * @param execTimeMap          平均执行时间
@@ -344,8 +336,6 @@ public class TransactionUtils {
     private static List<SvcExternalMetricsRes> dealWithData(Map<String, List<Integer>> latencyMap,
                                                             Map<String, Integer> serverFailRequestMap,
                                                             Map<String, Integer> clientFailRequestMap,
-                                                            Map<String,double[]> throughPutMap,
-                                                            Map<String,double[]> sucThroughPutMap,
                                                             Map<String, Map<String, Integer>> apiCallNumMap,
                                                             Map<String, Map<String, Integer>> serviceCallNumMap,
                                                             Map<String, Map<String, List<Integer>>> execTimeMap,
@@ -382,9 +372,6 @@ public class TransactionUtils {
             //计算失败率
             Double failPercent = failReqCount/(double)latencyList.size();
             svcExternalMetricsRes.setFailPercent(failPercent);
-            //吞吐量
-            svcExternalMetricsRes.setThroughput(throughPutMap.get(uniqueNote));
-            svcExternalMetricsRes.setSucThroughput(sucThroughPutMap.get(uniqueNote));
             //API调用次数
             svcExternalMetricsRes.setInstanceAPICallNumMap(apiCallNumMap.get(uniqueNote));
             //对其他服务调用次数

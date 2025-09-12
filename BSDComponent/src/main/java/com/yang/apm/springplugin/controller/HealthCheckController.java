@@ -12,6 +12,6 @@ public class HealthCheckController {
     @GetMapping("/health")
     @Operation(description = "提供健康检查")
     public ResponseDTO<String> healthCheck() {
-        return ResponseDTO.success("Detection tool running successfully!");
+        return ResponseDTO.success("BSD Component running successfully!");
     }
 }

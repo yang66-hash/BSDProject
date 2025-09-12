@@ -46,11 +46,10 @@ class ElasticSearchQueryManagerTest {
         SearchRequest searchRequest = SearchRequest.of(builder -> builder
                 .index("bsd.analysis.metrics.external.600s")
                 //无需hit数据，返回聚合数据
-                .size(0)
                 .query(q->q
                         .match(m->m
                                 .field("serviceName")
-                                .query("cloud-user-service")
+                                .query("cloud-admin-service")
                         )
                 )
                 .aggregations("by_podName", a->a
@@ -67,7 +66,9 @@ class ElasticSearchQueryManagerTest {
         );
         try {
             SearchResponse<JsonData> searchResponse = bsdesClientManager.getElasticsearchClient().search(searchRequest, JsonData.class);
+            System.out.println(searchResponse);
             List<StringTermsBucket> byPodName = searchResponse.aggregations().get("by_podName").sterms().buckets().array();
+            System.out.println(byPodName);
             for (StringTermsBucket byPodNameBucket : byPodName) {
                 Hit<JsonData> latestHits = byPodNameBucket.aggregations().get("latest_hits").topHits().hits().hits().get(0);
                 JsonData source = latestHits.source();

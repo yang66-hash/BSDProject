@@ -1,65 +1,67 @@
 package com.yang.apm.springplugin.services.dynamicdetect;
 
-import co.elastic.clients.elasticsearch._types.SortOrder;
-import co.elastic.clients.elasticsearch._types.aggregations.AggregationBuilders;
-import co.elastic.clients.elasticsearch._types.aggregations.TermsAggregation;
-import co.elastic.clients.elasticsearch._types.aggregations.TopHitsAggregation;
-import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import co.elastic.clients.elasticsearch.core.SearchRequest;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yang.apm.springplugin.base.Enum.DetectableBS;
+import com.yang.apm.springplugin.base.context.dynamicres.FragileServiceContext;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
+import com.yang.apm.springplugin.base.item.dynamic.FragileCalItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
-import com.yang.apm.springplugin.constant.ResType;
-import com.yang.apm.springplugin.pojo.ElasticsearchSettings;
+import com.yang.apm.springplugin.pojo.AntiPatternItem;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
+import com.yang.apm.springplugin.services.ESService;
+import com.yang.apm.springplugin.services.IDetectConvert;
+import com.yang.apm.springplugin.services.db.AntiPatternItemService;
 import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 
-import com.yang.apm.springplugin.utils.ElasticSearchQueryUtil;
 import com.yang.apm.springplugin.utils.IndexUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
-public class FragileServiceService {
+public class FragileServiceService  implements IDetectConvert {
 
 
     @Autowired
     private IntervalWindowMappingService intervalWindowMappingService;
+    @Autowired
+    private ESService eSService;
+
+    @Autowired
+    private AntiPatternItemService antiPatternItemService;
 
 
+    /**
+     * @param requestItem 传入服务名称
+     * @return 返回封装好的检测结果
+     */
     public DetectionResItem fragileServiceDetect(RequestItem requestItem) {
+        //封装DetectionResItem
+        QueryWrapper<AntiPatternItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name", DetectableBS.FRAGILE_SERVICE.getValue());
+        //相关异味信息
+        AntiPatternItem antiPatternItem = antiPatternItemService.getOne(queryWrapper);
+        DetectionResItem detectionResItem = convertToResItem(antiPatternItem);
         //针对所有的数据计算历史平均值，将TimeWindow下的历史数据计算出平均值，上传至ES
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        String formatted = dateFormat.format(date);
         Integer interval = intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
         Integer window = intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
         String indexNameForWindow = IndexUtil.getExternalMetricsIndex(window);
         String indexNameForInterval = IndexUtil.getExternalMetricsIndex(interval);
 
-        Query matchQuery = ElasticSearchQueryUtil.createMatchQuery("serviceName", requestItem.getServiceName());
-//        TermsAggregation podName = queryManager.createTermsAggregation("podName");
+        Map<String, SvcExternalMetricsRes> windowMetrics = eSService.getExternalMetrics(indexNameForWindow, requestItem.getServiceName());
+        Map<String, SvcExternalMetricsRes> intervalMetrics = eSService.getExternalMetrics(indexNameForInterval, requestItem.getServiceName());
+        //判断是否是脆弱服务
 
-
-        // 查询数据
-        // 按照服务实例分组，取出每一个实例的最新计算结果
-        //
-//        SearchRequest summaryRequest = new SearchRequest.Builder()
-//                .index(indexNameForWindow)
-//                .query(matchQuery)
-//                .sort(sort-> sort.field(f-> f.field("endTime").order(SortOrder.Desc)))
-//                .aggregations("by_podName", a -> a.terms(podName))
-//                .build();
-
-        return null;
+        FragileServiceContext fragileServiceContext = fragileServiceDetectDetail(windowMetrics, intervalMetrics,interval);
+        addNew2ResItem(fragileServiceContext, detectionResItem, requestItem);
+        return detectionResItem;
     }
+
 
 
     /**
@@ -69,18 +71,56 @@ public class FragileServiceService {
      *   1.请求失败率
      *   2.请求时延
      *   3.服务实例吞吐量
-     *   通过正则表达式匹配key值为"TRACE:5:cloud-user-service:Java*"的微服务实例，针对每一个微服务实例进行检测
+     *
      */
-    private void fragileServiceDetectDetail(List<SvcExternalMetricsRes> transResList) {
+    private FragileServiceContext fragileServiceDetectDetail(Map<String, SvcExternalMetricsRes> windowMetrics, Map<String, SvcExternalMetricsRes> intervalMetrics, Integer interval) {
+        FragileServiceContext fragileServiceContext = new FragileServiceContext();
+        Map<String, FragileCalItem> map = new HashMap<>();
+        Boolean flag = false;
+        //依据每一个当前存在数据的实例进行统计计算
+        for (Map.Entry<String, SvcExternalMetricsRes> entry : intervalMetrics.entrySet()) {
+            //对每一个实例统计是否涉及fragile service
+            FragileCalItem fragileCalItem = new FragileCalItem();
+            fragileCalItem.setAvgLatency(entry.getValue().getAvgLatency());
+            fragileCalItem.setFailPercent(entry.getValue().getFailPercent());
+            fragileCalItem.setRequestCount(entry.getValue().getRequestCount());
+            log.info("fragileServiceDetectDetail {} is executing.",entry.getKey());
+            map.put(entry.getKey(), fragileCalItem);
+            //计算当前的pod是否涉及到相应的异常
+            boolean isInstanceFragileService = isInstanceFragileService(windowMetrics.getOrDefault(entry.getKey(), null), entry.getValue());
+            if (isInstanceFragileService) {
+                flag = true;
+            }
+            fragileCalItem.setStatus(isInstanceFragileService);
+        }
 
+        fragileServiceContext.setStatus(flag);
+        log.info("map: {}",map);
+        fragileServiceContext.setInstanceStatus(map);
+        fragileServiceContext.setMetricsInterval(interval);
+        return fragileServiceContext;
+    }
 
-
-
-        transResList.forEach(transRes->{
-            //分析每一个实例的情况
-
-
-        });
+    private boolean isInstanceFragileService(SvcExternalMetricsRes windowMetrics, SvcExternalMetricsRes intervalMetrics) {
+        double FTRTH = 0.05;
+        double coefficient = 0.2;
+        boolean existFailPercent = false;
+        boolean existExecTimeOver = false;
+        boolean existThroughputLow = false;
+        if (intervalMetrics.getFailPercent()>FTRTH) {
+            existFailPercent = true;
+        }
+        double ETThreshold = windowMetrics.getAvgLatency()*(1+coefficient);
+        if (intervalMetrics.getAvgLatency()>ETThreshold){
+            existExecTimeOver = true;
+        }
+        //request time per minute
+        double TPThreshold = ((windowMetrics.getRequestCount()/(double)(windowMetrics.getInterval())*60.0))*coefficient;
+        double intervalTP = (intervalMetrics.getRequestCount()/(double)(windowMetrics.getInterval())*60.0);
+        if (intervalTP<TPThreshold){
+            existThroughputLow = true;
+        }
+        return existFailPercent && existExecTimeOver && existThroughputLow;
     }
 
 }

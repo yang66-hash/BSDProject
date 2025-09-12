@@ -3,6 +3,7 @@ package com.yang.apm.springplugin.sevices.db;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.mapper.IIntervalWindowMappingMapper;
 import com.yang.apm.springplugin.pojo.IntervalWindowMapping;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,13 @@ public class IntervalWindowMappingService extends ServiceImpl<IIntervalWindowMap
         QueryWrapper<IntervalWindowMapping> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("name", name);
         IntervalWindowMapping one = this.getOne(queryWrapper);
-        return one!=null ?one.getValue():null;
+        if (one==null&&ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY.equals(name)){
+            return 600;
+        } else if (one==null&&ConstantUtil.INTERVAL_OF_DYNAMIC_KEY.equals(name)) {
+            return 60;
+        }
+
+        return one.getValue();
     }
 
     public boolean setValueByName(String name,Integer value){
