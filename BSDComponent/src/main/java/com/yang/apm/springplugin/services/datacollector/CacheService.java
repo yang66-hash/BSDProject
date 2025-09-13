@@ -37,10 +37,9 @@ public class CacheService {
     /**
      * 三级结构：
      *   dataType -->
-     *      serviceName_interval -->
+     *      serviceName|interval -->
      *         Cache<podName, List<SvcRes>>   // 第三层用 Guava Cache，实现过期回收
      */
-
     @Autowired
     private IntervalWindowMappingService intervalWindowMappingService;
 
@@ -50,6 +49,86 @@ public class CacheService {
             ConcurrentHashMap<
                     String,
                     Cache<String, List<SvcRes>>>> svcCache = new ConcurrentHashMap<>();
+
+    /**
+     * 存储相应type类型的在时间窗口内的平均数据
+     *      * 三级结构：
+     *      *   dataType -->
+     *      *      serviceName -->   //不需要时间间隔数据 每一份服务的实例都只存储最新计算的平均值
+     *      *           Cache<podName, SvcRes>   // 第三层用 Guava Cache，实现过期回收
+     */
+    private ConcurrentHashMap<
+        String,
+        ConcurrentHashMap<String,
+            Cache<String,SvcRes>>> svcCalAvgCache = new ConcurrentHashMap<>();
+
+    // ========================= svcCalAvgCache 操作方法 =========================
+    
+    /**
+     * 存储平均数据到缓存
+     */
+    public <T extends SvcRes> void saveT2AvgCache( SvcRes svcRes, String resType) {
+        if (svcRes == null) {
+            return;
+        }
+
+        //设置第一层的key
+        var byDataType = svcCalAvgCache.computeIfAbsent(resType, k -> new ConcurrentHashMap<>());
+
+        //遍历数据
+
+        //构造第二层的key
+        Integer expiredTime = intervalWindowMappingService.getValueByName(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY);
+        String serviceInterval = svcRes.getServiceName();
+        var podCache = byDataType.computeIfAbsent(
+            serviceInterval,
+            si -> CacheBuilder.newBuilder()
+                .expireAfterWrite(expiredTime, TimeUnit.SECONDS)
+                .build());
+
+        String podName = svcRes.getPodName();
+
+        podCache.put(podName, svcRes);
+        log.info("cached [resType={}, serviceInterval={}, pod={}] ",
+            resType, serviceInterval, podCache);
+    }
+
+    /**
+     * 从服务层面取出所有实例的平均值（泛型版本）
+     * @param resType 资源类型
+     * @param serviceInterval 服务间隔键
+     * @param clazz 期望的返回类型
+     * @return 指定类型的数据映射
+     */
+    public <T extends SvcRes> Map<String, T> getAvgDataInServiceLevel(
+        String resType,
+        String serviceInterval,
+        Class<T> clazz
+        ){
+        var secondLevelCache = svcCalAvgCache.get(resType);
+        if (secondLevelCache == null) {
+            return Collections.emptyMap();
+        }
+        var podCache = secondLevelCache.get(serviceInterval);
+        if (podCache == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, T> result = new HashMap<>();
+        for (String podName : podCache.asMap().keySet()) {
+            SvcRes svcRes = podCache.getIfPresent(podName);
+
+            if (clazz.isInstance(svcRes)) {
+                result.put(podName, clazz.cast(svcRes));
+            } else if (svcRes != null) {
+                log.warn("跳过类型不匹配的数据: podName={}, 期望类型={}, 实际类型={}", 
+                    podName, clazz.getSimpleName(), svcRes.getClass().getSimpleName());
+            }
+        }
+
+        return result;
+    }
+    
 
     //将缓存中的检测结果发送到ES中
     /**
@@ -117,15 +196,46 @@ public class CacheService {
         return Optional.of(podCache.getIfPresent(podName));
     }
 
+//    /**
+//     *  按 resType + serviceInterval 批量获取所有实例的列表
+//     * @param resType 数据类型
+//     * @param serviceInterval 时间窗口
+//     * @return
+//     */
+//    public Map<String, List<SvcRes>> getResInServiceLevel(
+//            String resType,
+//            String serviceInterval
+//    ) {
+//        var byDataType = svcCache.get(resType);
+//        if (byDataType == null) {
+//            return Collections.emptyMap();
+//        }
+//        var podCache = byDataType.get(serviceInterval);
+//        if (podCache == null) {
+//            return Collections.emptyMap();
+//        }
+//
+//        Map<String, List<SvcRes>> result = new HashMap<>();
+//        for (String podName : podCache.asMap().keySet()) {
+//            List<SvcRes> list = podCache.getIfPresent(podName);
+//            if (list != null) {
+//                result.put(podName, list);
+//            }
+//        }
+//        return result;
+//    }
+
     /**
-     *  按 resType + serviceInterval 批量获取所有实例的列表
+     *  按 resType + serviceInterval 批量获取所有实例的列表 (泛型版本)
      * @param resType 数据类型
      * @param serviceInterval 时间窗口
-     * @return
+     * @param clazz 期望返回的类型
+     * @return 指定类型的Map
      */
-    public Map<String, List<SvcRes>> getResInServiceLevel(
+    public <T extends SvcRes> Map<String, List<T>> getResInServiceLevel(
             String resType,
-            String serviceInterval
+            String serviceInterval,
+            Class<T> clazz
     ) {
         var byDataType = svcCache.get(resType);
         if (byDataType == null) {
@@ -136,15 +246,92 @@ public class CacheService {
             return Collections.emptyMap();
         }
 
-        Map<String, List<SvcRes>> result = new HashMap<>();
+        Map<String, List<T>> result = new HashMap<>();
         for (String podName : podCache.asMap().keySet()) {
             List<SvcRes> list = podCache.getIfPresent(podName);
             if (list != null) {
-                result.put(podName, list);
+                List<T> typedList = list.stream()
+                    .filter(clazz::isInstance)
+                    .map(clazz::cast)
+                    .collect(Collectors.toList());
+                if (!typedList.isEmpty()) {
+                    result.put(podName, typedList);
+                }
             }
         }
         return result;
     }
+//
+//    /**
+//     * 只获取最新一条数据（基础版本）
+//     * @param resType 资源类型
+//     * @param serviceInterval 服务间隔键
+//     * @return 基础版本，返回 SvcRes
+//     */
+//    public Map<String, SvcRes> getLatestResInServiceLevel(
+//        String resType,
+//        String serviceInterval
+//    ) {
+//        var byDataType = svcCache.get(resType);
+//        if (byDataType == null) {
+//            return Collections.emptyMap();
+//        }
+//        var podCache = byDataType.get(serviceInterval);
+//        if (podCache == null) {
+//            return Collections.emptyMap();
+//        }
+//
+//        Map<String, SvcRes> result = new HashMap<>();
+//        for (String podName : podCache.asMap().keySet()) {
+//            List<SvcRes> list = podCache.getIfPresent(podName);
+//            if (list != null && !list.isEmpty()) {
+//                result.put(podName, list.get(list.size()-1));
+//            }
+//        }
+//        return result;
+//    }
+
+    /**
+     * 只获取最新一条数据（泛型版本）
+     * @param resType 资源类型
+     * @param serviceInterval 服务间隔键
+     * @param clazz 期望的返回类型
+     * @return 指定类型的最新数据映射
+     */
+    public <T extends SvcRes> Map<String, T> getLatestResInServiceLevel(
+        String resType,
+        String serviceInterval,
+        Class<T> clazz
+    ) {
+        var byDataType = svcCache.get(resType);
+        if (byDataType == null) {
+            return Collections.emptyMap();
+        }
+        var podCache = byDataType.get(serviceInterval);
+        if (podCache == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, T> result = new HashMap<>();
+        for (String podName : podCache.asMap().keySet()) {
+            List<SvcRes> list = podCache.getIfPresent(podName);
+            if (list != null && !list.isEmpty()) {
+                SvcRes latestRes = list.get(list.size()-1);
+                if (clazz.isInstance(latestRes)) {
+                    result.put(podName, clazz.cast(latestRes));
+                } else {
+                    log.warn("跳过类型不匹配的最新数据: podName={}, 期望类型={}, 实际类型={}", 
+                        podName, clazz.getSimpleName(), latestRes.getClass().getSimpleName());
+                }
+            }
+        }
+        
+        log.debug("获取最新数据: resType={}, serviceInterval={}, 期望类型={}, 匹配数量={}/{}", 
+            resType, serviceInterval, clazz.getSimpleName(), result.size(), podCache.asMap().size());
+        
+        return result;
+    }
+
 
     /**
      * 按照数据类型resType直接将所有服务的所有实例的所有数据返回

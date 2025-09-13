@@ -26,9 +26,6 @@ public class APPJVMSummaryInfo extends APPInfo {
     private SystemInfo systemInfo;
 
 
-
-
-
     public JVMSummaryRes toJVMSummaryRes() {
         JVMSummaryRes jvmSummaryRes = new JVMSummaryRes();
         jvmSummaryRes.setTimestamp(this.getTimeStamp());

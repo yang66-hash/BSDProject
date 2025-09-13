@@ -49,5 +49,5 @@ mbst:
 logging:
   level:
     root: info
-    com.yang.apm.springplugin: debug
+    com.yang.apm.springplugin: info
 

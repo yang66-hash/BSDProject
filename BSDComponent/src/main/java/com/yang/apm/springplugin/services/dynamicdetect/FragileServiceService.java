@@ -7,14 +7,18 @@ import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.dynamic.FragileCalItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.constant.ConstantUtil;
+import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.pojo.AntiPatternItem;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
+import com.yang.apm.springplugin.pojo.result.SvcRes;
 import com.yang.apm.springplugin.services.ESService;
 import com.yang.apm.springplugin.services.IDetectConvert;
+import com.yang.apm.springplugin.services.datacollector.CacheService;
 import com.yang.apm.springplugin.services.db.AntiPatternItemService;
 import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 
 import com.yang.apm.springplugin.utils.IndexUtil;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +33,11 @@ public class FragileServiceService  implements IDetectConvert {
 
     @Autowired
     private IntervalWindowMappingService intervalWindowMappingService;
+//    @Autowired
+//    private ESService eSService;
+
     @Autowired
-    private ESService eSService;
+    private CacheService cacheService;
 
     @Autowired
     private AntiPatternItemService antiPatternItemService;
@@ -49,18 +56,26 @@ public class FragileServiceService  implements IDetectConvert {
         DetectionResItem detectionResItem = convertToResItem(antiPatternItem);
         //针对所有的数据计算历史平均值，将TimeWindow下的历史数据计算出平均值，上传至ES
         Integer interval = intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
-        Integer window = intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY);
-        String indexNameForWindow = IndexUtil.getExternalMetricsIndex(window);
-        String indexNameForInterval = IndexUtil.getExternalMetricsIndex(interval);
+//        String indexNameForInterval = IndexUtil.getExternalMetricsIndex(interval);
 
-        Map<String, SvcExternalMetricsRes> windowMetrics = eSService.getExternalMetrics(indexNameForWindow, requestItem.getServiceName());
-        Map<String, SvcExternalMetricsRes> intervalMetrics = eSService.getExternalMetrics(indexNameForInterval, requestItem.getServiceName());
+//        Map<String, SvcExternalMetricsRes> windowMetrics = eSService.getExternalMetrics(indexNameForWindow, requestItem.getServiceName());
+//        Map<String, SvcExternalMetricsRes> intervalMetrics = eSService.getExternalMetrics(indexNameForInterval, requestItem.getServiceName());
+        String serviceIntervalAVG = requestItem.getServiceName();
+        String serviceInterval = requestItem.getServiceName() + "|" + interval;
+        
+        // 获取指定类型的数据
+        Map<String, SvcExternalMetricsRes> avgDataMap = cacheService.getAvgDataInServiceLevel(
+            ResType.EXTERNAL_AVG_METRICS.name(), serviceIntervalAVG, SvcExternalMetricsRes.class);
+        Map<String, SvcExternalMetricsRes> resLatestMap = cacheService.getLatestResInServiceLevel(
+            ResType.EXTERNAL_METRICS.name(), serviceInterval, SvcExternalMetricsRes.class);
+        log.info(avgDataMap.toString());
+        log.info(resLatestMap.toString());
         //判断是否是脆弱服务
-
-        FragileServiceContext fragileServiceContext = fragileServiceDetectDetail(windowMetrics, intervalMetrics,interval);
+        FragileServiceContext fragileServiceContext = fragileServiceDetectDetail(avgDataMap, resLatestMap, interval);
         addNew2ResItem(fragileServiceContext, detectionResItem, requestItem);
         return detectionResItem;
     }
+
 
 
 

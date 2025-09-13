@@ -5,19 +5,25 @@ import com.yang.apm.springplugin.constant.ConstantUtil;
 import com.yang.apm.springplugin.constant.ResType;
 import com.yang.apm.springplugin.pojo.result.SvcExternalMetricsRes;
 import com.yang.apm.springplugin.pojo.result.SvcRes;
+import com.yang.apm.springplugin.pojo.result.jvm.JVMSummaryRes;
+import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
 import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import com.yang.apm.springplugin.utils.IndexUtil;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Service
 @Slf4j
@@ -31,40 +37,32 @@ public class CalculateService {
 
     @Autowired
     private MetricsBufferService metricsBufferService;
+  @Autowired
+  private CharacterEncodingFilter characterEncodingFilter;
 
 
     /**
-     * @param list
-     * @param clazz 需要是SvcRes的子类
-     * @param <T>
-     * @return 将指定的List<SvcRes>转为指定子类的list列表
-     */
-    private <T extends SvcRes> List<T> convertCache2SpecSubClaList(List<SvcRes> list,Class<T> clazz){
-        return list.stream()
-                .filter(clazz::isInstance).map(clazz::cast)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 计算历史数据的平均值，并将数据发送到es中进行存储，以便展示
+     * 计算历史数据的平均值，并将数据回存Cache中，以便展示
      */
     public void calculateAvg4ExternalMetrics(){
-        String externalMetricsHistoryIndex = IndexUtil.getExternalMetricsIndex(intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY));
 
         //从cache中依据服务实例计算每一个服务实例的平均值 按照服务名-interval一个从缓存中复制计算
         //其中的key是service|interval
-        Set<String> keySetInSvcIvlLevel = cacheService.getKeySetInSvcIvlLevel(ResType.EXTERNAL_METRICS.name());
+        Set<String> keySetInSvcIvlLevel = cacheService.getKeySetInSvcIvlLevel(
+            ResType.EXTERNAL_METRICS.name());
 
         //针对每一个服务进行相应计算
-        keySetInSvcIvlLevel.forEach(key->{
-            Map<String, List<SvcRes>> resInServiceLevel = cacheService.getResInServiceLevel(ResType.EXTERNAL_METRICS.name(), key);
+        keySetInSvcIvlLevel.forEach(key -> {
+            Map<String, List<SvcExternalMetricsRes>> resInServiceLevel = cacheService.getResInServiceLevel(
+                ResType.EXTERNAL_METRICS.name(), key, SvcExternalMetricsRes.class);
             //针对每一个实例进行计算
-            resInServiceLevel.forEach((podName,svcResList)->{
+            resInServiceLevel.forEach((podName, svcResList) -> {
                 //依据每一个实例进行计算 计算完后将数据上传到ES
-                List<SvcExternalMetricsRes> externalMetricsRes = convertCache2SpecSubClaList(svcResList, SvcExternalMetricsRes.class);
-                SvcExternalMetricsRes svcExternalMetricsRes = innerCalExtMeByInstance(externalMetricsRes);
-                //将数据临时放入缓存队列
-                metricsBufferService.addItem2Index(svcExternalMetricsRes,externalMetricsHistoryIndex);
+                SvcExternalMetricsRes svcExternalMetricsRes = innerCalExtMeByInstance(svcResList);
+                // todo：将数据存储在本地缓存中
+                cacheService.saveT2AvgCache(svcExternalMetricsRes,
+                    ResType.EXTERNAL_AVG_METRICS.name());
+//                metricsBufferService.addItem2Index(svcExternalMetricsRes,externalMetricsHistoryIndex);
             });
         });
     }
@@ -158,4 +156,105 @@ public class CalculateService {
         return result;
     }
 
+    /**
+     * 计算某指标的平均值，或者记录当前时间窗口对应数据的最大值、最小值等
+     */
+    public void calculate4InternalMetrics() {
+        Set<String> keySetInSvcIvlLevel = cacheService.getKeySetInSvcIvlLevel(
+            ResType.INTERNAL_METRICS.name());
+        //针对收集到的数据做一次最大值、最小值以及平均值的统计
+        keySetInSvcIvlLevel.forEach(key -> {
+            Map<String, List<SvcMetricsRes>> resInServiceLevel = cacheService.getResInServiceLevel(
+                ResType.INTERNAL_METRICS.name(), key, SvcMetricsRes.class);
+            //针对每一个实例进行计算
+            resInServiceLevel.forEach((podName, svcResList) -> {
+                //依据每一个实例进行计算
+                SvcMetricsRes svcMetricsRes = innerCalInternalMeByInstance(svcResList);
+                // todo：将数据存储在本地缓存中
+                cacheService.saveT2AvgCache(svcMetricsRes,
+                    ResType.INTERNAL_METRICS.name());
+//                metricsBufferService.addItem2Index(svcExternalMetricsRes,externalMetricsHistoryIndex);
+            });
+        });
+    }
+
+    private SvcMetricsRes innerCalInternalMeByInstance(List<SvcMetricsRes> svcResList) {
+        SvcMetricsRes result = new SvcMetricsRes();
+
+
+        JVMSummaryRes jvmSummaryRes = new JVMSummaryRes();
+        
+        // 提取所有 JVMSummaryRes 数据
+        List<JVMSummaryRes> allJVMMemories = svcResList.stream()
+            .filter(svcMetricsRes -> svcMetricsRes.getJvmSummaryList() != null)
+            .flatMap(svcMetricsRes -> svcMetricsRes.getJvmSummaryList().stream())
+            .toList();
+
+        //去计算获取最大值、平均值
+        if (!allJVMMemories.isEmpty()){
+            Date startTime = svcResList.stream().map(SvcMetricsRes::getStartTime)
+                .filter(Objects::nonNull)
+                .max(Date::compareTo)
+                .orElse(new Date());
+            Date endTime = svcResList.stream().map(SvcMetricsRes::getEndTime)
+                .filter(Objects::nonNull)
+                .max(Date::compareTo)
+                .orElse(new Date());
+            result.setStartTime(startTime);
+            result.setEndTime(endTime);
+            result.setInterval(svcResList.get(0).getInterval());
+            result.setLanguage(svcResList.get(0).getLanguage());
+            result.setServiceName(svcResList.get(0).getServiceName());
+            result.setPodName(svcResList.get(0).getPodName());
+            //堆
+            Long maxHeapMaxed = allJVMMemories.stream().map(JVMSummaryRes::getHeapMaxed)
+                .filter(Objects::nonNull)
+                .max(Long::compareTo)
+                .orElse(-1L);
+
+            Double avgHeapUsed = allJVMMemories.stream().map(JVMSummaryRes::getHeapUsed)
+                .filter(Objects::nonNull)
+                .mapToLong(Long::longValue)
+                .average()
+                .orElse(-1L);
+            Double avgNonHeapUsed = allJVMMemories.stream().map(JVMSummaryRes::getNonHeapUsed)
+                .filter(Objects::nonNull)
+                .mapToLong(Long::longValue)
+                .average()
+                .orElse(-1L);
+
+            // 提取其他需要的最大值和平均值
+            Long maxThreadCount = allJVMMemories.stream()
+                .map(JVMSummaryRes::getThreadCount)
+                .filter(Objects::nonNull)
+                .max(Long::compareTo)
+                .orElse(0L);
+
+            Double maxCPUProPCT = allJVMMemories.stream()
+                .map(JVMSummaryRes::getCpuProPCT)
+                .filter(Objects::nonNull)
+                .max(Double::compareTo)
+                .orElse(-1d);
+
+
+            // 设置聚合后的数据
+            jvmSummaryRes.setHeapMaxed(maxHeapMaxed);
+            jvmSummaryRes.setThreadCount(maxThreadCount);
+            jvmSummaryRes.setHeapUsed(Math.round(avgHeapUsed));
+            jvmSummaryRes.setNonHeapUsed(Math.round(avgNonHeapUsed));
+            jvmSummaryRes.setCpuProPCT(maxCPUProPCT);
+
+
+        }
+        // 将聚合后的 JVMSummaryRes 添加到结果中
+        List<JVMSummaryRes> resultList = new ArrayList<>();
+        resultList.add(jvmSummaryRes);
+        result.setJvmSummaryList(resultList);
+
+
+        return result;
+    }
+
+
+    
 }

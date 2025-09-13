@@ -135,8 +135,10 @@ public class ScheduledService {
 //            log.error(cacheService.getKeySetInSvcIvlLevel(ResType.INTERNAL_METRICS.name()).toString());
 //            log.error(cacheService.getKeySetInSvcIvlLevel(ResType.BUSINESS_METRICS.name()).toString());
 
-            //计算window时间范围内的数据平均值 从缓存中加载所有的external metrics计算并发送到es中
+            //计算window时间范围内的数据平均值 从缓存中加载所有的external metrics 回存到cache中
             calculateService.calculateAvg4ExternalMetrics();
+            //计算window时间范围内的，internal metrics的指标平均值
+            calculateService.calculate4InternalMetrics();
             log.info("getMetricsScheduled定时调用任务执行完成");
         }finally {
             scheduledNext();

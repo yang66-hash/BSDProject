@@ -4,6 +4,7 @@ import com.yang.apm.springplugin.base.context.ParentContext;
 import com.yang.apm.springplugin.base.item.DetectionResItem;
 import com.yang.apm.springplugin.base.item.RequestItem;
 import com.yang.apm.springplugin.pojo.AntiPatternItem;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
@@ -32,6 +33,25 @@ public interface IDetectConvert {
 //        df.setTimeZone(tz);
         detectionResItem.setTimestamp(time);
         detectionResItem.setContext(context);
-        detectionResItem.setStatus(context.getStatus());
+        
+        // 防止空指针异常：安全地获取status
+        Boolean status = getSafeStatus(context);
+        detectionResItem.setStatus(status);
+    }
+    
+    /**
+     * 安全地获取context的status，防止空指针异常
+     * @param context 可能为null的context对象
+     * @return 安全的status值，默认为false
+     */
+    default <T extends ParentContext> Boolean getSafeStatus(T context) {
+        if (context != null) {
+            Boolean status = context.getStatus();
+            // 如果context.getStatus()返回null，使用默认值false
+            return (status != null) ? status : false;
+        } else {
+            // context为null时，默认状态为false
+            return false;
+        }
     }
 }
