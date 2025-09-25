@@ -229,12 +229,14 @@ public class CacheService {
      *  按 resType + serviceInterval 批量获取所有实例的列表 (泛型版本)
      * @param resType 数据类型
      * @param serviceInterval 时间窗口
+     * @param latestTimes 要获取最新的几条数据（最多10条）
      * @param clazz 期望返回的类型
      * @return 指定类型的Map
      */
     public <T extends SvcRes> Map<String, List<T>> getResInServiceLevel(
             String resType,
             String serviceInterval,
+            int latestTimes,
             Class<T> clazz
     ) {
         var byDataType = svcCache.get(resType);
@@ -247,15 +249,25 @@ public class CacheService {
         }
 
         Map<String, List<T>> result = new HashMap<>();
+
+
         for (String podName : podCache.asMap().keySet()) {
             List<SvcRes> list = podCache.getIfPresent(podName);
-            if (list != null) {
+            //缓存最多存储10条记录
+            if (list != null && (latestTimes > 10||latestTimes<0)) {
                 List<T> typedList = list.stream()
-                    .filter(clazz::isInstance)
                     .map(clazz::cast)
                     .collect(Collectors.toList());
                 if (!typedList.isEmpty()) {
                     result.put(podName, typedList);
+                }
+            }else if (list!=null ) {
+                List<T> last3 = list.stream()
+                    .map(clazz::cast)
+                    .skip(Math.max(list.size() - 3, 0))
+                    .toList();
+                if (!last3.isEmpty()) {
+                    result.put(podName, last3);
                 }
             }
         }

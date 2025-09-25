@@ -53,7 +53,11 @@ public class TransactionUtils {
         Map<String,Integer> sqlQueryNumMap = new HashMap<>();
         //记录每一服务实例下慢查询次数
         Map<String,Integer> sqlSlowQueryNumMap = new HashMap<>();
-        //记录每一服务实例下
+        //记录每一服务实例下SQL指纹及其查询次数
+        Map<String, Map<String, Integer>> sqlFingerPrintMap = new HashMap<>();
+        //记录每一服务实例下慢查询SQL指纹及其次数
+        Map<String, Map<String, Integer>> sqlSlowFingerPrintMap = new HashMap<>();
+
 
 
         traceListMap.forEach((traceId,traceList)->{
@@ -101,11 +105,6 @@ public class TransactionUtils {
                         serverFailRequestMap.put(uniqueNote, 0);
                         clientFailRequestMap.put(uniqueNote, 0);
                     }
-
-                    //吞吐量
-                    long intervalToEnd = traceService.getTimeStamp().getTime() - startTime.getTime();
-                    //posInArr ∈ [0,interval)
-                    int posInArr = (int) (intervalToEnd/1000/60);
 
                     //API调用次数
                     Map<String, Integer> subAPICallNumMap = new HashMap<>();
@@ -182,8 +181,8 @@ public class TransactionUtils {
                     execTimeMap.put(uniqueNote, subExecTimeMap);
                 }
 
-                //统计当前请求的数据库查询次数
-                dealWithSQL(traceService,uniqueNote,sqlSpanList,sqlQueryNumMap,sqlSlowQueryNumMap);
+                //统计当前请求的数据库查询次数和指纹信息
+                dealWithSQL(traceService,uniqueNote,sqlSpanList,sqlQueryNumMap,sqlSlowQueryNumMap,sqlFingerPrintMap,sqlSlowFingerPrintMap);
 
             });
 
@@ -198,6 +197,8 @@ public class TransactionUtils {
                 execTimeMap,
                 sqlQueryNumMap,
                 sqlSlowQueryNumMap,
+                sqlFingerPrintMap,
+                sqlSlowFingerPrintMap,
                 endTime,
                 startTime,
                 interval);
@@ -266,26 +267,36 @@ public class TransactionUtils {
 
 
     /**
-     * 统计数据库查询的次数
+     * 统计数据库查询的次数和指纹信息
      */
     private static void dealWithSQL(TraceServiceInfo traceService,
                                     String uniqueNote, List<TraceServiceInfo> sqlSpanList,
                                     Map<String, Integer> sqlQueryNumMap,
-                                    Map<String, Integer> sqlSlowQueryNumMap) {
+                                    Map<String, Integer> sqlSlowQueryNumMap,
+                                    Map<String, Map<String, Integer>> sqlFingerPrintMap,
+                                    Map<String, Map<String, Integer>> sqlSlowFingerPrintMap) {
         //找到属于请求traceService的sql语句执行span
         List<TraceServiceInfo> subSqlSpan = sqlSpanList.stream().filter(spanService ->
                 spanService.getParent()!=null &&
                 spanService.getParent().getId().equals(traceService.getSpan().getId())).collect(Collectors.toList());
         subSqlSpan.forEach(sqlSpan->{
             Span span = sqlSpan.getSpan();
+            
+            // 生成SQL指纹 - 使用SQL语句作为指纹，如果没有则使用表名
+            String sqlFingerprint = generateSqlFingerprint(span);
+            
             //单次的统计
             if (span.getComposite()==null){
                 //是慢查询
                 if (span.getDuration()!=null &&
                         span.getDuration().getUs().compareTo(ConstantUtil.SQL_EXEC_TIME_BOUND)>0){
                     sqlSlowQueryNumMap.put(uniqueNote,sqlSlowQueryNumMap.getOrDefault(uniqueNote, 0) + 1);
+                    // 记录慢查询指纹
+                    updateSqlFingerprint(sqlSlowFingerPrintMap, uniqueNote, sqlFingerprint, 1);
                 }
                 sqlQueryNumMap.put(uniqueNote,sqlQueryNumMap.getOrDefault(uniqueNote, 0) + 1);
+                // 记录所有查询指纹
+                updateSqlFingerprint(sqlFingerPrintMap, uniqueNote, sqlFingerprint, 1);
             //存在短时间内执行相同语句的情况
             }else{
                 //总执行时间
@@ -295,8 +306,12 @@ public class TransactionUtils {
                 Integer averageExecTime =  totalTime/count;
                 if (averageExecTime.compareTo(ConstantUtil.SQL_EXEC_TIME_BOUND)>0){
                     sqlSlowQueryNumMap.put(uniqueNote,sqlSlowQueryNumMap.getOrDefault(uniqueNote, 0) + count);
+                    // 记录慢查询指纹
+                    updateSqlFingerprint(sqlSlowFingerPrintMap, uniqueNote, sqlFingerprint, count);
                 }
                 sqlQueryNumMap.put(uniqueNote,sqlQueryNumMap.getOrDefault(uniqueNote, 0) + count);
+                // 记录所有查询指纹
+                updateSqlFingerprint(sqlFingerPrintMap, uniqueNote, sqlFingerprint, count);
             }
         });
     }
@@ -326,12 +341,14 @@ public class TransactionUtils {
      * @param apiCallNumMap        每一个服务实例下被调用的API的调用次数
      * @param serviceCallNumMap    调用其他服务的次数
      * @param execTimeMap          平均执行时间
-     * @param sqlQueryNumMap
-     * @param sqlSlowQueryNumMap
-     * @param endTime
-     * @param startTime
-     * @param interval
-     * @return
+     * @param sqlQueryNumMap       SQL查询总次数统计
+     * @param sqlSlowQueryNumMap   慢查询次数统计
+     * @param sqlFingerPrintMap    SQL指纹及其查询次数映射
+     * @param sqlSlowFingerPrintMap 慢查询SQL指纹及其次数映射
+     * @param endTime              结束时间
+     * @param startTime            开始时间
+     * @param interval             时间间隔
+     * @return                     处理后的指标结果列表
      */
     private static List<SvcExternalMetricsRes> dealWithData(Map<String, List<Integer>> latencyMap,
                                                             Map<String, Integer> serverFailRequestMap,
@@ -341,6 +358,8 @@ public class TransactionUtils {
                                                             Map<String, Map<String, List<Integer>>> execTimeMap,
                                                             Map<String, Integer> sqlQueryNumMap,
                                                             Map<String, Integer> sqlSlowQueryNumMap,
+                                                            Map<String, Map<String, Integer>> sqlFingerPrintMap,
+                                                            Map<String, Map<String, Integer>> sqlSlowFingerPrintMap,
                                                             Date endTime,
                                                             Date startTime,
                                                             Integer interval
@@ -384,6 +403,11 @@ public class TransactionUtils {
             //sql数据统计
             svcExternalMetricsRes.setSqlQueryCount(sqlQueryNumMap.get(uniqueNote) == null ? 0 : sqlQueryNumMap.get(uniqueNote));
             svcExternalMetricsRes.setSlowQueryCount(sqlSlowQueryNumMap.get(uniqueNote) == null ? 0 : sqlSlowQueryNumMap.get(uniqueNote));
+            
+            //sql指纹数据统计
+            svcExternalMetricsRes.setSqlFingerPrintMap(sqlFingerPrintMap.get(uniqueNote));
+            svcExternalMetricsRes.setSqlSlowFingerPrintMap(sqlSlowFingerPrintMap.get(uniqueNote));
+            
             resList.add(svcExternalMetricsRes);
         });
 
@@ -621,6 +645,64 @@ public class TransactionUtils {
             }
         });
         return tracesListMap;
+    }
+
+    /**
+     * 生成SQL指纹 - 直接使用DBModel中的statement字段值作为key
+     */
+    private static String generateSqlFingerprint(Span span) {
+        if (span.getDb() == null) {
+            return "UNKNOWN_SQL";
+        }
+        
+        // 直接使用statement字段的值作为指纹key
+        String statement = span.getDb().getStatement();
+        if (statement != null && !statement.trim().isEmpty()) {
+            return statement.trim();
+        }
+        
+        // 如果没有SQL语句，使用备用标识
+        String type = span.getDb().getType();
+        String instance = span.getDb().getInstance();
+        String subtype = span.getSubtype();
+        
+        // 构建备用指纹：数据库类型.子类型.实例名
+        StringBuilder fingerprint = new StringBuilder();
+        if (type != null) {
+            fingerprint.append(type);
+        } else {
+            fingerprint.append("UNKNOWN");
+        }
+        
+        fingerprint.append(".");
+        
+        if (subtype != null) {
+            fingerprint.append(subtype);
+        } else {
+            fingerprint.append("UNKNOWN");
+        }
+        
+        fingerprint.append(".");
+        
+        if (instance != null) {
+            fingerprint.append(instance);
+        } else {
+            fingerprint.append("UNKNOWN");
+        }
+        
+        return fingerprint.toString();
+    }
+
+    
+    /**
+     * 更新SQL指纹映射
+     */
+    private static void updateSqlFingerprint(Map<String, Map<String, Integer>> fingerprintMap, 
+                                           String uniqueNote, 
+                                           String fingerprint, 
+                                           Integer count) {
+        fingerprintMap.computeIfAbsent(uniqueNote, k -> new HashMap<>())
+                     .merge(fingerprint, count, Integer::sum);
     }
 
 }

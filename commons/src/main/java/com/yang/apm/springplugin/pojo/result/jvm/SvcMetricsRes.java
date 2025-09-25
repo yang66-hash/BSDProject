@@ -23,8 +23,6 @@ public class SvcMetricsRes extends SvcRes {
 
 
     //先统计heap三部分内存池的内存信息eden survivor old
-
-
     private Map<String,List<JVMMemoryRes>> memoryRes;
 
     private Map<String, List<JVMGCRes>> gcRes;

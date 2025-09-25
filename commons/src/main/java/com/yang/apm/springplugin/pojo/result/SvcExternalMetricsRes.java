@@ -1,6 +1,7 @@
 package com.yang.apm.springplugin.pojo.result;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.models.security.SecurityScheme.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -70,7 +71,10 @@ public class SvcExternalMetricsRes extends SvcRes{
     private Integer sqlQueryCount;
     @Schema(description = "当前服务实例此段时间间隔内的关系型数据库的慢查询次数")
     private Integer slowQueryCount;
-
+    @Schema(description = "key为当前时间窗口下当前实例的数据库查询的指纹，value为对应慢查询的次数")
+    private Map<String, Integer> sqlSlowFingerPrintMap;
+    @Schema(description = "key为当前时间窗口下当前实例的数据库查询的指纹，value为对应数据库查询次数")
+    private Map<String, Integer> sqlFingerPrintMap;
     /**
      * record the service instance invoked by this service instance
      * key: language-serviceName-podName, unique identifier

@@ -5,15 +5,17 @@ import com.yang.apm.springplugin.base.item.dynamic.UnevenApiUsageItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.Map;
-
+/**
+ * Uneven API Usage 检测上下文
+ * 针对微服务级别的API使用不均检测
+ */
 @Data
 public class UnevenApiUsageContext extends ParentContext {
 
     //时间间隔
     private Integer metricsInterval;
-    //当前时间间隔内
-    @Schema(description = "统计该服务的每一个实例是否涉及到Uneven API Usage异味")
-    private Map<String, UnevenApiUsageItem> instanceStatus;
+    
+    //微服务级别的API使用不均检测结果（聚合所有实例数据）
+    private UnevenApiUsageItem microserviceApiUsage;
 
 } 

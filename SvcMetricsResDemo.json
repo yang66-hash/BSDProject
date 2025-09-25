@@ -1,0 +1,646 @@
+{
+  "code": 10000,
+  "msg": "Operation successful.",
+  "data": [
+    {
+      "startTime": "2025-02-07T03:12:55.000+00:00",
+      "endTime": "2025-02-07T03:17:55.000+00:00",
+      "interval": 5,
+      "language": "Java",
+      "serviceName": "cloud-property-service",
+      "podName": "fb73ef5697fec73b3d8e9b71b560bfe44eb34636a8ac52c72b4ede05b7174cb7",
+      "memoryRes": {
+        "PS Eden Space": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "committed": 48234496,
+            "used": 21682752,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "committed": 48234496,
+            "used": 24097232,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "committed": 48234496,
+            "used": 25797600,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "committed": 48234496,
+            "used": 27960296,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "committed": 48234496,
+            "used": 29829440,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "committed": 48234496,
+            "used": 32166016,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "committed": 48234496,
+            "used": 33933824,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "committed": 48234496,
+            "used": 36245032,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "committed": 48234496,
+            "used": 37972664,
+            "max": 2088763392
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "committed": 48234496,
+            "used": 40151056,
+            "max": 2088763392
+          }
+        ],
+        "Code Cache": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "committed": 50593792,
+            "used": 49328256,
+            "max": 251658240
+          }
+        ],
+        "Compressed Class Space": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "committed": 11141120,
+            "used": 10322048,
+            "max": 1073741824
+          }
+        ],
+        "PS Survivor Space": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "committed": 1572864,
+            "used": 1212704,
+            "max": 1572864
+          }
+        ],
+        "PS Old Gen": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "committed": 228065280,
+            "used": 143234152,
+            "max": 4184866816
+          }
+        ],
+        "Metaspace": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "committed": 84238336,
+            "used": 80026272,
+            "max": null
+          }
+        ]
+      },
+      "gcRes": {
+        "PS MarkSweep": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "gcCount": 3,
+            "gcTime": 1047
+          }
+        ],
+        "PS Scavenge": [
+          {
+            "timestamp": "2025-02-07T03:13:23.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:13:53.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:14:23.740+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:14:53.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:15:23.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:15:53.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:16:23.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:16:53.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:17:23.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          },
+          {
+            "timestamp": "2025-02-07T03:17:53.741+00:00",
+            "gcCount": 869,
+            "gcTime": 8861
+          }
+        ]
+      },
+      "jvmSummaryList": [
+        {
+          "timestamp": "2025-02-07T03:13:23.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 166105000,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60264444336,
+          "threadCount": 61,
+          "cpuSysPCT": 0.034,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11296583680,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:13:53.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 168311536,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60266406152,
+          "threadCount": 61,
+          "cpuSysPCT": 0.031,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11294879744,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:14:23.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 170219848,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60268367816,
+          "threadCount": 61,
+          "cpuSysPCT": 0.033,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11312635904,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:14:53.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 172174600,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60270329560,
+          "threadCount": 61,
+          "cpuSysPCT": 0.03,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11316568064,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:15:23.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 174251688,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60272292824,
+          "threadCount": 61,
+          "cpuSysPCT": 0.03,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11297898496,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:15:53.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 176388512,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60274286960,
+          "threadCount": 61,
+          "cpuSysPCT": 0.033,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11288854528,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:16:23.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 178339672,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60276248912,
+          "threadCount": 61,
+          "cpuSysPCT": 0.028,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11292311552,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:16:53.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 180459336,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60278212296,
+          "threadCount": 61,
+          "cpuSysPCT": 0.053,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11295064064,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:17:23.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 182394912,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60280173920,
+          "threadCount": 61,
+          "cpuSysPCT": 0.036,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11300945920,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        },
+        {
+          "timestamp": "2025-02-07T03:17:53.739+00:00",
+          "heapCommitted": 277872640,
+          "heapMaxed": 5579472896,
+          "heapUsed": 184365360,
+          "nonHeapCommitted": 145973248,
+          "nonHeapUsed": 139676576,
+          "gcAllocated": 60282135704,
+          "threadCount": 61,
+          "cpuSysPCT": 0.03,
+          "memSysTotal": 25101860864,
+          "memSysFree": 11319771136,
+          "cpuProPCT": 0.001,
+          "memProTotal": 12295487488
+        }
+      ]
+    }
+  ]
+}

@@ -4,24 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="factor2.0">
-      <change afterPath="$PROJECT_DIR$/.idea/.cache/.Apifox_Helper/.toolWindow.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/ApifoxUploaderProjectSetting.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/setting.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/error.md" afterDir="false" />
+    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="完成循环依赖和uneven load distribution异味">
+      <change afterPath="$PROJECT_DIR$/BusinessMetricsDemo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SvcMetricsResDemo.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/IDetectConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/IDetectConvert.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CacheService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CacheService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CalculateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CalculateService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/ScheduledService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/ScheduledService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/FragileServiceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/FragileServiceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenLoadDistributionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenLoadDistributionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/context/dynamicres/UnevenLoadDistributionContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/context/dynamicres/UnevenLoadDistributionContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/UnevenLoadDisItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/UnevenLoadDisItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/constant/ResType.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/constant/ResType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/metrics/jvm/last/APPJVMSummaryInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/metrics/jvm/last/APPJVMSummaryInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/CallRateAnomalyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/CallRateAnomalyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/FrequentGcService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/FrequentGcService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/HighFreSlowQueriesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/HighFreSlowQueriesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/InconsistentServiceResponseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/InconsistentServiceResponseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/LongTimeGcService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/LongTimeGcService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/MemJitterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/MemJitterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/ResourceWasteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/ResourceWasteService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/TheRampService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/TheRampService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenApiUsageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenApiUsageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenLogicProService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenLogicProService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/TransactionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/TransactionUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/Enum/DetectableBS.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/Enum/DetectableBS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/context/dynamicres/ResourceWasteContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/context/dynamicres/ResourceWasteContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/context/dynamicres/UnevenApiUsageContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/context/dynamicres/UnevenApiUsageContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/CallRateAnomalyItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/CallRateAnomalyItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/FrequentGcItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/FrequentGcItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/HighFreSlowQueriesItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/HighFreSlowQueriesItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/LongTimeGcItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/LongTimeGcItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/MemJitterItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/MemJitterItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/TheRampItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/TheRampItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/UnevenApiUsageItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/UnevenApiUsageItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/UnevenLogicProItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/dynamic/UnevenLogicProItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/SvcExternalMetricsRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/SvcExternalMetricsRes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/jvm/SvcMetricsRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/jvm/SvcMetricsRes.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,8 +45,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="JUnit5 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -75,82 +87,82 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.BusinessServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.BusinessServiceTest.testBusinessService.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CacheServiceTest.test.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CalculateServiceTest.test10MinCalculate (1).executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CalculateServiceTest.test10MinCalculate.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.CircularDependencyDetectionServiceTest.detectCircularDependencyAsync.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ESServiceTest.getExternalMetrics.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ElasticSearchQueryManagerTest.createTermsAggregation.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ElasticSearchQueryManagerTest.test.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ElasticsearchClientManagerTest.createExternalMetrics1min.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ElasticsearchClientManagerTest.isIndexExistedTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ElasticsearchClientManagerTest.saveData2IndexTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ElasticsearchClientManagerTest.test.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.IntervalWindowMappingServiceTest.getValueByName.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MetricsServiceTest.test.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MetricsServiceTest.testTrace.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.delCurWindow.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.delInterval.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.delWindow.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.get.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.putCurWindow.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.putInterval.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.PersistentIntegerCacheServiceTest.putWindow.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ScheduledServiceTest.createIndexByStrategyTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ScheduledServiceTest.testScheduledExternalMetrics.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TransactionUtilsTest.testTrace2.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UnevenLoadDistributionSimpleTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.UnevenLoadDistributionSimpleTest.testDataPreparation.executor&quot;: &quot;Run&quot;,
-    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.BSDComponent [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.BSDComponent [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.BSDProject [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.BSDProject [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.BSDProject [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.BSDProject [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DataCollector [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DataCollector [compile].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DataCollector [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DataCollector [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DataCollector [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DataCollector [verify].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.common [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.common [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.commons [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.commons [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.commons [package].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.BSDComponentApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.DataCollectApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/javaworkplace/BSDProject/BSDComponent/src/test/java/com/yang/apm/springplugin&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.BusinessServiceTest.executor": "Run",
+    "JUnit.BusinessServiceTest.testBusinessService.executor": "Run",
+    "JUnit.CacheServiceTest.test.executor": "Run",
+    "JUnit.CalculateServiceTest.test10MinCalculate (1).executor": "Run",
+    "JUnit.CalculateServiceTest.test10MinCalculate.executor": "Run",
+    "JUnit.CircularDependencyDetectionServiceTest.detectCircularDependencyAsync.executor": "Run",
+    "JUnit.ESServiceTest.getExternalMetrics.executor": "Run",
+    "JUnit.ElasticSearchQueryManagerTest.createTermsAggregation.executor": "Run",
+    "JUnit.ElasticSearchQueryManagerTest.test.executor": "Run",
+    "JUnit.ElasticsearchClientManagerTest.createExternalMetrics1min.executor": "Run",
+    "JUnit.ElasticsearchClientManagerTest.isIndexExistedTest.executor": "Run",
+    "JUnit.ElasticsearchClientManagerTest.saveData2IndexTest.executor": "Run",
+    "JUnit.ElasticsearchClientManagerTest.test.executor": "Run",
+    "JUnit.IntervalWindowMappingServiceTest.getValueByName.executor": "Run",
+    "JUnit.MetricsServiceTest.test.executor": "Run",
+    "JUnit.MetricsServiceTest.testTrace.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.delCurWindow.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.delInterval.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.delWindow.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.get.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.putCurWindow.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.putInterval.executor": "Run",
+    "JUnit.PersistentIntegerCacheServiceTest.putWindow.executor": "Run",
+    "JUnit.ScheduledServiceTest.createIndexByStrategyTest.executor": "Run",
+    "JUnit.ScheduledServiceTest.testScheduledExternalMetrics.executor": "Run",
+    "JUnit.TransactionUtilsTest.testTrace2.executor": "Run",
+    "JUnit.UnevenLoadDistributionSimpleTest.executor": "Run",
+    "JUnit.UnevenLoadDistributionSimpleTest.testDataPreparation.executor": "Run",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.BSDComponent [clean].executor": "Run",
+    "Maven.BSDComponent [package].executor": "Run",
+    "Maven.BSDProject [clean].executor": "Run",
+    "Maven.BSDProject [install].executor": "Run",
+    "Maven.BSDProject [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor": "Run",
+    "Maven.BSDProject [package].executor": "Run",
+    "Maven.DataCollector [clean].executor": "Run",
+    "Maven.DataCollector [compile].executor": "Run",
+    "Maven.DataCollector [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor": "Run",
+    "Maven.DataCollector [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor": "Run",
+    "Maven.DataCollector [package].executor": "Run",
+    "Maven.DataCollector [verify].executor": "Run",
+    "Maven.common [clean].executor": "Run",
+    "Maven.common [install].executor": "Run",
+    "Maven.commons [clean].executor": "Run",
+    "Maven.commons [install].executor": "Run",
+    "Maven.commons [package].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.BSDComponentApplication.executor": "Run",
+    "Spring Boot.DataCollectApplication.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "master",
+    "go.import.settings.migrated": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/javaworkplace/BSDProject/BSDComponent/src/test/java/com/yang/apm/springplugin",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -370,7 +382,25 @@
       <workItem from="1757684460334" duration="7415000" />
       <workItem from="1757725008356" duration="6513000" />
       <workItem from="1757750311739" duration="18870000" />
-      <workItem from="1757775419488" duration="4751000" />
+      <workItem from="1757775419488" duration="5355000" />
+      <workItem from="1757808395492" duration="6117000" />
+      <workItem from="1757832015026" duration="83000" />
+      <workItem from="1757832225976" duration="16373000" />
+      <workItem from="1757897205789" duration="2025000" />
+      <workItem from="1757920720417" duration="2251000" />
+      <workItem from="1757984214524" duration="614000" />
+      <workItem from="1758100927342" duration="13386000" />
+      <workItem from="1758173877443" duration="2962000" />
+      <workItem from="1758191844257" duration="12517000" />
+      <workItem from="1758243535280" duration="6200000" />
+      <workItem from="1758328766829" duration="2649000" />
+      <workItem from="1758501639838" duration="2282000" />
+      <workItem from="1758527014198" duration="3432000" />
+      <workItem from="1758548665381" duration="614000" />
+      <workItem from="1758607236846" duration="20000" />
+      <workItem from="1758683455424" duration="805000" />
+      <workItem from="1758694032853" duration="2274000" />
+      <workItem from="1758766804808" duration="3344000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <option name="closed" value="true" />
@@ -508,7 +538,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757685669315</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="完成循环依赖和uneven load distribution异味">
+      <option name="closed" value="true" />
+      <created>1757780438648</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1757780438648</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -543,7 +581,8 @@
     <MESSAGE value="refactor:eliminate the use of local cache to store interval and time window" />
     <MESSAGE value="test" />
     <MESSAGE value="factor2.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="factor2.0" />
+    <MESSAGE value="完成循环依赖和uneven load distribution异味" />
+    <option name="LAST_COMMIT_MESSAGE" value="完成循环依赖和uneven load distribution异味" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>

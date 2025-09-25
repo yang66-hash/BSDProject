@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 /**
  * 针对服务的单一实例
@@ -27,4 +28,14 @@ public class FrequentGcItem {
     private Double gcTimeRatio;
     @Schema(description = "堆内存使用率")
     private Double heapMemoryUsage;
+    
+    // 新增字段用于四维度检测
+    @Schema(description = "总GC次数")
+    private Long totalGcCount;
+    @Schema(description = "历史平均GC次数")
+    private Double historicalAvgGcCount;
+    @Schema(description = "检测到的问题列表")
+    private List<String> detectedIssues;
+    @Schema(description = "检测原因说明")
+    private String detectionReason;
 } 

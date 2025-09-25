@@ -54,10 +54,9 @@ public class CalculateService {
         //针对每一个服务进行相应计算
         keySetInSvcIvlLevel.forEach(key -> {
             Map<String, List<SvcExternalMetricsRes>> resInServiceLevel = cacheService.getResInServiceLevel(
-                ResType.EXTERNAL_METRICS.name(), key, SvcExternalMetricsRes.class);
+                ResType.EXTERNAL_METRICS.name(), key,-1, SvcExternalMetricsRes.class);
             //针对每一个实例进行计算
             resInServiceLevel.forEach((podName, svcResList) -> {
-                //依据每一个实例进行计算 计算完后将数据上传到ES
                 SvcExternalMetricsRes svcExternalMetricsRes = innerCalExtMeByInstance(svcResList);
                 // todo：将数据存储在本地缓存中
                 cacheService.saveT2AvgCache(svcExternalMetricsRes,
@@ -76,7 +75,6 @@ public class CalculateService {
         int totalReqServerFailCount = 0;
         int totalResClientFailCount = 0;
         int totalFailPercent = 0;
-        //times per minutes
 
         // 用来存储合并后的 Map 数据
         Map<String, Integer> totalInstanceAPICallNumMap = new HashMap<>();
@@ -165,7 +163,7 @@ public class CalculateService {
         //针对收集到的数据做一次最大值、最小值以及平均值的统计
         keySetInSvcIvlLevel.forEach(key -> {
             Map<String, List<SvcMetricsRes>> resInServiceLevel = cacheService.getResInServiceLevel(
-                ResType.INTERNAL_METRICS.name(), key, SvcMetricsRes.class);
+                ResType.INTERNAL_METRICS.name(), key,-1, SvcMetricsRes.class);
             //针对每一个实例进行计算
             resInServiceLevel.forEach((podName, svcResList) -> {
                 //依据每一个实例进行计算

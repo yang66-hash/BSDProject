@@ -8,7 +8,7 @@ public enum DetectableBS {
     ESB_USAGE("ESB Usage"),
     No_API_GATEWAY("No API-Gateway"),
     HUB_LIKE_DEPENDENCY("Hub-like Dependency"),
-    MICROSWRVICE_GREEDY("Microservice Greedy"),
+    MICROSERVICE_GREEDY("Microservice Greedy"),
     WRONG_CUTS("Wrong Cuts"),
     SCATTERED_FUNCTIONALITY("Scattered Functionality"),
     SHARING_PERSISTENCE("Sharing Persistence"),
@@ -28,15 +28,12 @@ public enum DetectableBS {
     FREQUENT_GC("Frequent GC"),
     LONG_TIME_GC("Long Time GC"),
     MEM_JITTER_OF_SVC("Memory Jitter Of Service"),
-    UNEVEN_LOGIC_PRO("Uneven logic processing"),
+    UNEVEN_LOGIC_PRO("Uneven Logic Processing"),
     FALLING_DOMINOES("Falling Dominoes"),
     UNNECESSARY_PRO("Unnecessary Processing"),
     THE_RAMP("The Ramp"),
     CHATTY_SERVICE("Chatty Service"),
     SERVICE_CHAIN("Service Chain");
-
-
-
 
     private final String name;
 
@@ -45,6 +42,10 @@ public enum DetectableBS {
     }
 
     public String getValue() {
+        return name;
+    }
+
+    public String getName() {
         return name;
     }
 }

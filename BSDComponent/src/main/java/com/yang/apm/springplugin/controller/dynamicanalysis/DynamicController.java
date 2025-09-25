@@ -7,7 +7,6 @@ import com.yang.apm.springplugin.services.DetectionItemBufferService;
 import com.yang.apm.springplugin.services.dynamicdetect.FragileServiceService;
 import com.yang.apm.springplugin.services.dynamicdetect.UnevenLoadDistributionService;
 import com.yang.apm.springplugin.services.dynamicdetect.InconsistentServiceResponseService;
-import com.yang.apm.springplugin.services.dynamicdetect.ResourceWasteService;
 import com.yang.apm.springplugin.services.dynamicdetect.CallRateAnomalyService;
 import com.yang.apm.springplugin.services.dynamicdetect.UnevenApiUsageService;
 import com.yang.apm.springplugin.services.dynamicdetect.ChattyServiceService;
@@ -46,8 +45,8 @@ public class DynamicController {
     @Autowired
     private InconsistentServiceResponseService inconsistentServiceResponseService;
 
-    @Autowired
-    private ResourceWasteService resourceWasteService;
+//    @Autowired
+//    private ResourceWasteService resourceWasteService;
 
     @Autowired
     private CallRateAnomalyService callRateAnomalyService;
@@ -137,19 +136,19 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    @RequestMapping(path = "/resource-waste",
-        method = RequestMethod.POST,
-        produces = "application/json; charset=UTF-8",
-        consumes = {"text/plain", "application/*"})
-    @Operation(description = "检测运行时态下异味————Resource Waste")
-    public ResponseDTO<String> resourceWaste(@RequestBody RequestItem requestItem){
-
-        DetectionResItem detectionResItem = resourceWasteService.resourceWasteDetect(requestItem);
-        log.info("resource waste detection finished for " + requestItem.getServiceName());
-        detectionItemBufferService.addResItem(detectionResItem);
-        //从es中拉取历史数据和当前数据作分析
-        return ResponseDTO.success("Detect command reached.");
-    }
+//    @RequestMapping(path = "/resource-waste",
+//        method = RequestMethod.POST,
+//        produces = "application/json; charset=UTF-8",
+//        consumes = {"text/plain", "application/*"})
+//    @Operation(description = "检测运行时态下异味————Resource Waste")
+//    public ResponseDTO<String> resourceWaste(@RequestBody RequestItem requestItem){
+//
+//        DetectionResItem detectionResItem = resourceWasteService.resourceWasteDetect(requestItem);
+//        log.info("resource waste detection finished for " + requestItem.getServiceName());
+//        detectionItemBufferService.addResItem(detectionResItem);
+//        //从es中拉取历史数据和当前数据作分析
+//        return ResponseDTO.success("Detect command reached.");
+//    }
 
     @RequestMapping(path = "/call-rate-anomaly",
         method = RequestMethod.POST,
@@ -179,20 +178,22 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
+    @Deprecated
     @RequestMapping(path = "/chatty-service",
         method = RequestMethod.POST,
         produces = "application/json; charset=UTF-8",
         consumes = {"text/plain", "application/*"})
     @Operation(description = "检测运行时态下异味————Chatty Service")
     public ResponseDTO<String> chattyService(@RequestBody RequestItem requestItem){
-
-        DetectionResItem detectionResItem = chattyServiceService.chattyServiceDetect(requestItem);
-        log.info("chatty service detection finished for " + requestItem.getServiceName());
-        detectionItemBufferService.addResItem(detectionResItem);
+//
+//        DetectionResItem detectionResItem = chattyServiceService.chattyServiceDetect(requestItem);
+//        log.info("chatty service detection finished for " + requestItem.getServiceName());
+//        detectionItemBufferService.addResItem(detectionResItem);
         //从es中拉取历史数据和当前数据作分析
-        return ResponseDTO.success("Detect command reached.");
+        return ResponseDTO.success("No detection provided.");
     }
 
+    @Deprecated
     @RequestMapping(path = "/service-chain",
         method = RequestMethod.POST,
         produces = "application/json; charset=UTF-8",
@@ -200,12 +201,13 @@ public class DynamicController {
     @Operation(description = "检测运行时态下异味————Service Chain")
     public ResponseDTO<String> serviceChain(@RequestBody RequestItem requestItem){
 
-        DetectionResItem detectionResItem = serviceChainService.serviceChainDetect(requestItem);
-        log.info("service chain detection finished for " + requestItem.getServiceName());
-        detectionItemBufferService.addResItem(detectionResItem);
+//        DetectionResItem detectionResItem = serviceChainService.serviceChainDetect(requestItem);
+//        log.info("service chain detection finished for " + requestItem.getServiceName());
+//        detectionItemBufferService.addResItem(detectionResItem);
         //从es中拉取历史数据和当前数据作分析
-        return ResponseDTO.success("Detect command reached.");
+        return ResponseDTO.success("No detection provided.");
     }
+
 
     @RequestMapping(path = "/high-frequency-of-slow-queries",
         method = RequestMethod.POST,
@@ -221,19 +223,21 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
+    @Deprecated
     @RequestMapping(path = "/n+1-queries",
         method = RequestMethod.POST,
         produces = "application/json; charset=UTF-8",
         consumes = {"text/plain", "application/*"})
     @Operation(description = "检测运行时态下异味————N+1 Queries")
     public ResponseDTO<String> n1Queries(@RequestBody RequestItem requestItem){
-
-        DetectionResItem detectionResItem = n1QueriesService.n1QueriesDetect(requestItem);
-        log.info("n+1 queries detection finished for " + requestItem.getServiceName());
-        detectionItemBufferService.addResItem(detectionResItem);
+//
+//        DetectionResItem detectionResItem = n1QueriesService.n1QueriesDetect(requestItem);
+//        log.info("n+1 queries detection finished for " + requestItem.getServiceName());
+//        detectionItemBufferService.addResItem(detectionResItem);
         //从es中拉取历史数据和当前数据作分析
-        return ResponseDTO.success("Detect command reached.");
+        return ResponseDTO.success("No detection provided.");
     }
+
 
     @RequestMapping(path = "/frequent-gc",
         method = RequestMethod.POST,
@@ -291,6 +295,7 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
+    @Deprecated
     @RequestMapping(path = "/falling-dominoes",
         method = RequestMethod.POST,
         produces = "application/json; charset=UTF-8",
@@ -305,6 +310,7 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
+    @Deprecated
     @RequestMapping(path = "/unnecessary-processing",
         method = RequestMethod.POST,
         produces = "application/json; charset=UTF-8",

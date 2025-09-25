@@ -41,7 +41,7 @@ public class GreedyService implements IDetectConvert {
 
     public DetectionResItem getGreedySvc(RequestItem requestItem) throws IOException {
         QueryWrapper<AntiPatternItem> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name", DetectableBS.MICROSWRVICE_GREEDY.getValue());
+        queryWrapper.eq("name", DetectableBS.MICROSERVICE_GREEDY.getValue());
         //相关异味信息
         AntiPatternItem antiPatternItem = antiPatternItemService.getOne(queryWrapper);
         DetectionResItem detectionResItem = convertToResItem(antiPatternItem);
