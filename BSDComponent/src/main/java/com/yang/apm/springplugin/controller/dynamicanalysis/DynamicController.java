@@ -178,33 +178,11 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    @Deprecated
-    @RequestMapping(path = "/chatty-service",
-        method = RequestMethod.POST,
-        produces = "application/json; charset=UTF-8",
-        consumes = {"text/plain", "application/*"})
-    @Operation(description = "检测运行时态下异味————Chatty Service")
     public ResponseDTO<String> chattyService(@RequestBody RequestItem requestItem){
-//
-//        DetectionResItem detectionResItem = chattyServiceService.chattyServiceDetect(requestItem);
-//        log.info("chatty service detection finished for " + requestItem.getServiceName());
-//        detectionItemBufferService.addResItem(detectionResItem);
-        //从es中拉取历史数据和当前数据作分析
         return ResponseDTO.success("No detection provided.");
     }
 
-    @Deprecated
-    @RequestMapping(path = "/service-chain",
-        method = RequestMethod.POST,
-        produces = "application/json; charset=UTF-8",
-        consumes = {"text/plain", "application/*"})
-    @Operation(description = "检测运行时态下异味————Service Chain")
     public ResponseDTO<String> serviceChain(@RequestBody RequestItem requestItem){
-
-//        DetectionResItem detectionResItem = serviceChainService.serviceChainDetect(requestItem);
-//        log.info("service chain detection finished for " + requestItem.getServiceName());
-//        detectionItemBufferService.addResItem(detectionResItem);
-        //从es中拉取历史数据和当前数据作分析
         return ResponseDTO.success("No detection provided.");
     }
 
@@ -223,18 +201,7 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    @Deprecated
-    @RequestMapping(path = "/n+1-queries",
-        method = RequestMethod.POST,
-        produces = "application/json; charset=UTF-8",
-        consumes = {"text/plain", "application/*"})
-    @Operation(description = "检测运行时态下异味————N+1 Queries")
     public ResponseDTO<String> n1Queries(@RequestBody RequestItem requestItem){
-//
-//        DetectionResItem detectionResItem = n1QueriesService.n1QueriesDetect(requestItem);
-//        log.info("n+1 queries detection finished for " + requestItem.getServiceName());
-//        detectionItemBufferService.addResItem(detectionResItem);
-        //从es中拉取历史数据和当前数据作分析
         return ResponseDTO.success("No detection provided.");
     }
 
@@ -295,34 +262,12 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    @Deprecated
-    @RequestMapping(path = "/falling-dominoes",
-        method = RequestMethod.POST,
-        produces = "application/json; charset=UTF-8",
-        consumes = {"text/plain", "application/*"})
-    @Operation(description = "检测运行时态下异味————Falling Dominoes")
     public ResponseDTO<String> fallingDominoes(@RequestBody RequestItem requestItem){
-
-        DetectionResItem detectionResItem = fallingDominoesService.fallingDominoesDetect(requestItem);
-        log.info("falling dominoes detection finished for " + requestItem.getServiceName());
-        detectionItemBufferService.addResItem(detectionResItem);
-        //从es中拉取历史数据和当前数据作分析
-        return ResponseDTO.success("Detect command reached.");
+        return ResponseDTO.success("No detection provided.");
     }
 
-    @Deprecated
-    @RequestMapping(path = "/unnecessary-processing",
-        method = RequestMethod.POST,
-        produces = "application/json; charset=UTF-8",
-        consumes = {"text/plain", "application/*"})
-    @Operation(description = "检测运行时态下异味————Unnecessary Processing")
     public ResponseDTO<String> unnecessaryProcessing(@RequestBody RequestItem requestItem){
-
-        DetectionResItem detectionResItem = unnecessaryProService.unnecessaryProDetect(requestItem);
-        log.info("unnecessary processing detection finished for " + requestItem.getServiceName());
-        detectionItemBufferService.addResItem(detectionResItem);
-        //从es中拉取历史数据和当前数据作分析
-        return ResponseDTO.success("Detect command reached.");
+        return ResponseDTO.success("No detection provided.");
     }
 
     @RequestMapping(path = "/the-ramp",
