@@ -4,42 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="上传readme">
-      <change afterPath="$PROJECT_DIR$/architecture.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/当前插件支持类型.md" afterDir="false" />
+    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="部分修改">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/datacollector/BusinessMetricsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/datacollector/BusinessMetricsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/datacollector/TraceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/datacollector/TraceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CacheService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CacheService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CalculateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CalculateService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CircularDependencyDetectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/CircularDependencyDetectionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/ScheduledService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/ScheduledService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/metricscollector/BusinessMetricsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/metricscollector/BusinessMetricsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/metricscollector/MetricsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/metricscollector/MetricsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/metricscollector/TraceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/datacollector/metricscollector/TraceService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/ChattyServiceService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/FallingDominoesService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/LongTimeGcService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/LongTimeGcService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/N1QueriesService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/ResourceWasteService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/ServiceChainService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenLoadDistributionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/services/dynamicdetect/UnevenLoadDistributionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/APPBusinessMetricsUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/APPBusinessMetricsUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/APPMetricsUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/APPMetricsUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/TransactionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/utils/TransactionUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/test/java/com/yang/apm/springplugin/services/datacollector/CircularDependencyDetectionServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/test/java/com/yang/apm/springplugin/services/datacollector/CircularDependencyDetectionServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/src/test/java/com/yang/apm/springplugin/utils/TransactionUtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/test/java/com/yang/apm/springplugin/utils/TransactionUtilsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/DetectionResItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/base/item/DetectionResItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/BusinessMetricsMappingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/BusinessMetricsMappingStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/CircularDependencyTracesMappingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/CircularDependencyTracesMappingStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/DetectionResMappingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/DetectionResMappingStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/ExternalMetricsMappingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/ExternalMetricsMappingStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/InternalMetricsMappingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/indexmapping/InternalMetricsMappingStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/SvcRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/SvcRes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/SvcTransRes.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/pojo/result/SvcTransRes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/utils/TimeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/commons/src/main/java/com/yang/apm/springplugin/utils/TimeUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cycleDependencyDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/cycleDependencyDemo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/README_CN.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/docs/UnevenLoadDistribution算法说明.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/docs/不均衡负载检测使用示例.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/UNEVEN_LOAD_DISTRIBUTION.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BusinessMetricsDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datademo/BusinessMetricsDemo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CallRateAnomalyDetection.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/CallRateAnomalyDetection.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FINAL_COMPLETE_API_LIST.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/FINAL_COMPLETE_API_LIST.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frequent_GC_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Frequent_GC_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/High_Frequency_Slow_Queries_Cache_Based_Detection.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/High_Frequency_Slow_Queries_Cache_Based_Detection.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Instance_Based_Slow_Query_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Instance_Based_Slow_Query_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Long_Time_GC_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Long_Time_GC_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Memory_Jitter_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Memory_Jitter_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQL_Fingerprint_Enhancement.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/SQL_Fingerprint_Enhancement.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SvcMetricsResDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datademo/SvcMetricsResDemo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/The_Ramp_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/The_Ramp_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnevenApiUsageDetection.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/UnevenApiUsageDetection.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Uneven_Logic_Processing_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Uneven_Logic_Processing_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/architecture.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/img/architecture.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cycleDependencyDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datademo/cycleDependencyDemo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/error.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid6396.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/当前插件支持类型.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/当前插件支持类型.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +169,10 @@
       <recent name="E:\javaworkplace\BSDProject\BSDComponent\src\main\java\com\yang\apm\springplugin\utils" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\javaworkplace\BSDProject\docs\cn" />
+      <recent name="E:\javaworkplace\BSDProject\docs\datademo" />
+      <recent name="E:\javaworkplace\BSDProject\docs" />
+      <recent name="E:\javaworkplace\BSDProject\docs\img" />
       <recent name="E:\javaworkplace\BSDProject\DataCollector\src\main\resources" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
@@ -422,6 +415,7 @@
       <workItem from="1759755155376" duration="3744000" />
       <workItem from="1759805425446" duration="3427000" />
       <workItem from="1759822420193" duration="7934000" />
+      <workItem from="1759890800188" duration="1538000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <option name="closed" value="true" />
@@ -615,7 +609,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759845804453</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="部分修改">
+      <option name="closed" value="true" />
+      <created>1759890859079</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1759890859079</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -654,7 +656,8 @@
     <MESSAGE value="完成Call Rate Anomaly,Frequent GC,High Frequency slow queries,slow query,long time gc, memory jitter,the ramp, uneven logic processing, uneven api usage的检测" />
     <MESSAGE value="关闭不再提供检测的接口" />
     <MESSAGE value="上传readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="上传readme" />
+    <MESSAGE value="部分修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="部分修改" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
