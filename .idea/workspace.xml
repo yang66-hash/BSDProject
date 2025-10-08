@@ -4,8 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="update README.md">
-      <change afterPath="$PROJECT_DIR$/README_CN.md" afterDir="false" />
+    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="add EN md">
+      <change afterPath="$PROJECT_DIR$/README_EN.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/CallRateAnomalyDetection.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/FINAL_COMPLETE_API_LIST.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/Frequent_GC_Detection_Implementation.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/High_Frequency_Slow_Queries_Cache_Based_Detection.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/Instance_Based_Slow_Query_Detection_Implementation.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/Long_Time_GC_Detection_Implementation.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/Memory_Jitter_Detection_Implementation.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/SQL_Fingerprint_Enhancement.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/Supported_Plugin_Types.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/The_Ramp_Detection_Implementation.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/UNEVEN_LOAD_DISTRIBUTION.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/UnevenApiUsageDetection.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/en/Uneven_Logic_Processing_Detection_Implementation.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -392,7 +405,7 @@
       <workItem from="1759755155376" duration="3744000" />
       <workItem from="1759805425446" duration="3427000" />
       <workItem from="1759822420193" duration="7934000" />
-      <workItem from="1759890800188" duration="7717000" />
+      <workItem from="1759890800188" duration="8371000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <option name="closed" value="true" />
@@ -610,7 +623,23 @@
       <option name="project" value="LOCAL" />
       <updated>1759899033699</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="add README_CN.md.md">
+      <option name="closed" value="true" />
+      <created>1759899064297</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1759899064297</updated>
+    </task>
+    <task id="LOCAL-00029" summary="add EN md">
+      <option name="closed" value="true" />
+      <created>1759899696693</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1759899696693</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -628,7 +657,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="second commit" />
     <MESSAGE value="add:添加integerCache" />
     <MESSAGE value="add:添加mapdb配置信息" />
     <MESSAGE value="修改分布式缓存为本地缓存" />
@@ -652,7 +680,9 @@
     <MESSAGE value="部分修改" />
     <MESSAGE value="add README.md" />
     <MESSAGE value="update README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="update README.md" />
+    <MESSAGE value="add README_CN.md.md" />
+    <MESSAGE value="add EN md" />
+    <option name="LAST_COMMIT_MESSAGE" value="add EN md" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
