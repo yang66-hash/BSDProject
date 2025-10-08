@@ -137,7 +137,7 @@ public class CacheService {
      */
     @Setter
     @Getter
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date curTime;
 
 //    private final HashSet<DetectionResItem>

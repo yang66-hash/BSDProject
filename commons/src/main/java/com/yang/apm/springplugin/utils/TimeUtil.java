@@ -11,7 +11,7 @@ public class TimeUtil {
     }
 
     public static Date parseStr2Date(String timeStr) throws ParseException {
-        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Date time = dateTimeFormatter.parse(timeStr);
         return time;
     }

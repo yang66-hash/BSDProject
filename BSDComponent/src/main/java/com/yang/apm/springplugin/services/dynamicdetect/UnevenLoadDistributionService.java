@@ -35,15 +35,11 @@ public class UnevenLoadDistributionService implements IDetectConvert {
 
   @Autowired
   private IntervalWindowMappingService intervalWindowMappingService;
-  @Autowired
-  private ESService eSService;
 
   @Autowired
   private AntiPatternItemService antiPatternItemService;
   @Autowired
   private CacheService cacheService;
-
-  private final Integer  SCALING_FACTOR = 1000;
 
   /**
    * 比较维度：统一服务下的不同实例 因为不同服务的业务内容不同，CPU密集度、IO密集度不尽相同，不合适做横向对比

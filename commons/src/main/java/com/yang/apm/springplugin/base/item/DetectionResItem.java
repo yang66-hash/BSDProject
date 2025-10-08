@@ -20,23 +20,32 @@ public class DetectionResItem {
 
     @Field(name = "status")
     private Boolean status;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")  // 修改为ISO 8601格式，包含毫秒和UTC时区
     @Field(name = "timestamp")
     private Date timestamp;
+
     @Field(name = "detectionID")
     private String detectionID;
+
     @Field(name = "detector")
     private String detector;
+
     @Field(name = "name")
     private String name;
+
     @Field(name = "categoryName")
     private String categoryName;
+
     @Field(name = "typeName")
     private String typeName;
+
     @Field(name = "detectMethod")
     private String detectMethod;
+
     @Field(name = "targetInstance")
     private String targetInstance;
+
     @Field(name = "context")
     private Object context;
 }

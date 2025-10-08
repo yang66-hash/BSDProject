@@ -56,7 +56,7 @@ public class TraceController {
             return ResponseDTO.failure(ResponseStatusEnum.PARAM_IS_BLANK);
         }
         try {
-            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date endTime = dateTimeFormatter.parse(endTimeString);
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             logger.info("fetching traces from {} to {}",startTime,endTime);

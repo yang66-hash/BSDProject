@@ -9,6 +9,7 @@ import com.yang.apm.springplugin.pojo.result.jvm.JVMSummaryRes;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
 import com.yang.apm.springplugin.sevices.db.IntervalWindowMappingService;
 import com.yang.apm.springplugin.utils.IndexUtil;
+import java.lang.management.ManagementFactory;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class CalculateService {
         result.setServiceName(externalMetricsResList.get(0).getServiceName());
         result.setLanguage(externalMetricsResList.get(0).getLanguage());
         result.setPodName(externalMetricsResList.get(0).getPodName());
-
+        result.setCollector(ManagementFactory.getRuntimeMXBean().getName());
         //获取窗口大小,若是收集到的数据还不足用户设置的大小,那么窗口设置为实际大小
         result.setInterval(Math.min(intervalWindowMappingService.getValueByName(ConstantUtil.INCREMENT_WINDOW_OF_DYNAMIC_KEY),intervalWindowMappingService.getValueByName(ConstantUtil.TIME_WINDOW_OF_DYNAMIC_KEY)));
 
@@ -204,6 +205,7 @@ public class CalculateService {
             result.setLanguage(svcResList.get(0).getLanguage());
             result.setServiceName(svcResList.get(0).getServiceName());
             result.setPodName(svcResList.get(0).getPodName());
+            result.setCollector(ManagementFactory.getRuntimeMXBean().getName());
             //堆
             Long maxHeapMaxed = allJVMMemories.stream().map(JVMSummaryRes::getHeapMaxed)
                 .filter(Objects::nonNull)

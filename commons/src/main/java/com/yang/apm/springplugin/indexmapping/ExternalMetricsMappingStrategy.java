@@ -12,8 +12,9 @@ public class ExternalMetricsMappingStrategy implements IndexMappingStrategy{
         return mappings -> mappings
                 //设置无需动态推断字段类型
                 .dynamic(DynamicMapping.False)
-                .properties("startTime",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
-                .properties("endTime",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
+                .properties("startTime",p->p.date(d->d.format("strict_date_time")))
+                .properties("endTime",p->p.date(d->d.format("strict_date_time")))
+                .properties("collector",p->p.keyword(k->k))
                 .properties("interval",p->p.keyword(k->k))
                 .properties("language",p->p.keyword(k->k))
                 .properties("serviceName",p->p.keyword(k->k))

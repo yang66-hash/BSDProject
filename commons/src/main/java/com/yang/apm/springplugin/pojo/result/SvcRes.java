@@ -12,15 +12,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SvcRes {
-    /**
-     * date format: yyyy-MM-dd HH:mm:ss
-     */
-    @Schema(description = "末点时刻", example = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Schema(description = "末点时刻", example = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date startTime;
-    @Schema(description = "起点时刻", example = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+
+    @Schema(description = "起点时刻", example = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date endTime;
+
     /**
      * interval equals to startTime - endTime
      * unit: min
@@ -40,4 +39,7 @@ public class SvcRes {
      */
     @Schema(description = "当前实例的名称")
     private String podName;
+
+    @Schema(description = "指标收集者")
+    private String collector;
 }

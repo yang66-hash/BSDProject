@@ -38,7 +38,7 @@ public class TraceService {
 
 
     /**
-     * @param endTimeString  format：yyyy-MM-dd HH:mm:ss
+     * @param endTimeString  format：yyyy-MM-dd'T'HH:mm:ss.SSS'Z' (ISO 8601 format)
      * @param interval unit:秒
      */
     public List<SvcExternalMetricsRes> getMetricsInTraces(String endTimeString, Integer interval) {
@@ -46,7 +46,7 @@ public class TraceService {
             return new LinkedList<>();
         }
         try {
-            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date endTime = dateTimeFormatter.parse(endTimeString);
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             log.info("fetching traces from {} to {}", startTime, endTime);
@@ -76,15 +76,15 @@ public class TraceService {
             //分析指标数据
             List<SvcExternalMetricsRes> resList = TransactionUtils.analyzeTransaction4Metrics(
                 stringListMap, endTime, startTime, interval);
-            
+
             //异步分析链路，判断循环依赖
             CompletableFuture<Integer> circularDependencyFuture = circularDependencyDetectionService
                 .detectCircularDependencyAsync(stringListMap, endTime, startTime, interval);
-            
+
             // 异步处理，不阻塞主流程
             circularDependencyFuture.thenAccept(count -> {
                 if (count > 0) {
-                    log.warn("在当前时间窗口 [{} - {}] 内检测到 {} 个循环依赖", 
+                    log.warn("在当前时间窗口 [{} - {}] 内检测到 {} 个循环依赖",
                         startTime, endTime, count);
                 } else {
                     log.debug("在当前时间窗口 [{} - {}] 内未检测到循环依赖", startTime, endTime);

@@ -34,7 +34,7 @@ public class BusinessMetricsService {
     private ESQueryService ESQueryService;
 
     /**
-     * @param endTimeString  format：yyyy-MM-dd HH:mm:ss
+     * @param endTimeString  format：yyyy-MM-dd'T'HH:mm:ss.SSS'Z' (ISO 8601 format)
      * @param interval unit:秒
      */
     public List<BusinessMetricsRes> getBusinessMetrics(String endTimeString, Integer interval) {
@@ -42,7 +42,7 @@ public class BusinessMetricsService {
             return new LinkedList<>();
         }
         try {
-            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date endTime = dateTimeFormatter.parse(endTimeString);
             Date startTime = TimeUtil.calculateStartTime(endTime, interval);
             log.info("fetching business metrics from {} to {}", startTime, endTime);

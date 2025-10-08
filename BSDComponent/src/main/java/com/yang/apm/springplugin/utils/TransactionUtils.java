@@ -10,6 +10,7 @@ import com.yang.apm.springplugin.pojo.result.sql.DBModel;
 import com.yang.apm.springplugin.pojo.span.Span;
 import com.yang.apm.springplugin.pojo.traces.TraceServiceInfo;
 import com.yang.apm.springplugin.pojo.traces.TraceTransaction;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -146,8 +147,6 @@ public class TransactionUtils {
                     //吞吐量
 
                     long intervalToEnd = traceService.getTimeStamp().getTime() - startTime.getTime();
-                    //posInArr ∈ [0,interval)
-                    int posInArr = (int) (intervalToEnd/1000/60);
 
                     //API调用次数
                     Map<String, Integer> subAPICallNumMap = APICallNumMap.get(uniqueNote);
@@ -257,13 +256,131 @@ public class TransactionUtils {
                 svcTransRes.setLanguage(strings[0]);
                 svcTransRes.setServiceName(strings[1]);
                 svcTransRes.setPodName(strings[2]);
+                svcTransRes.setCollector(ManagementFactory.getRuntimeMXBean().getName());
                 svcTransRes.setRequestChain(chain); // 设置单个 RequestChain
+                
+                // 统计链路属性
+                calculateChainMetrics(svcTransRes, chain);
+                
                 list.add(svcTransRes);
             });
         });
         return list;
     }
 
+    /**
+     * 计算链路指标
+     * @param svcTransRes 服务传输结果对象
+     * @param chain 请求链
+     */
+    private static void calculateChainMetrics(SvcTransRes svcTransRes, RequestChain chain) {
+        if (chain == null || chain.getChain() == null) {
+            svcTransRes.setChainDepth(0);
+            svcTransRes.setSqlCount(0);
+            svcTransRes.setTotalExecTime(0.0);
+            return;
+        }
+        
+        // 计算链路深度
+        int chainDepth = calculateChainDepth(chain.getChain());
+        svcTransRes.setChainDepth(chainDepth);
+        
+        // 计算SQL请求次数
+        int sqlCount = calculateSqlCount(chain.getChain());
+        svcTransRes.setSqlCount(sqlCount);
+        
+        // 计算总执行时间
+        double totalExecTime = calculateTotalExecTime(chain.getChain());
+        svcTransRes.setTotalExecTime(totalExecTime);
+    }
+    
+    /**
+     * 计算链路深度
+     * @param node 链路节点
+     * @return 链路深度
+     */
+    private static int calculateChainDepth(TraceChainNode node) {
+        if (node == null) {
+            return 0;
+        }
+        
+        int maxDepth = 1; // 当前节点深度为1
+        
+        if (node.getSubNodes() != null && !node.getSubNodes().isEmpty()) {
+            for (TraceChainNode subNode : node.getSubNodes()) {
+                int subDepth = calculateChainDepth(subNode);
+                maxDepth = Math.max(maxDepth, 1 + subDepth);
+            }
+        }
+        
+        return maxDepth;
+    }
+    
+    /**
+     * 计算SQL请求次数
+     * @param node 链路节点
+     * @return SQL请求总次数
+     */
+    private static int calculateSqlCount(TraceChainNode node) {
+        if (node == null) {
+            return 0;
+        }
+        
+        int sqlCount = 0;
+        
+        // 统计当前节点的SQL请求次数
+        if (node.getContainSQL() != null && node.getContainSQL() && node.getSqlModelList() != null) {
+            for (DBModel dbModel : node.getSqlModelList()) {
+                if (dbModel.getDataQueryNum() != null) {
+                    sqlCount += dbModel.getDataQueryNum();
+                } else {
+                    sqlCount += 1; // 如果没有查询次数，默认为1
+                }
+            }
+        }
+        
+        // 递归统计子节点的SQL请求次数
+        if (node.getSubNodes() != null && !node.getSubNodes().isEmpty()) {
+            for (TraceChainNode subNode : node.getSubNodes()) {
+                sqlCount += calculateSqlCount(subNode);
+            }
+        }
+        
+        return sqlCount;
+    }
+    
+    /**
+     * 计算总执行时间
+     * @param node 链路节点
+     * @return 总执行时间（微秒）
+     */
+    private static double calculateTotalExecTime(TraceChainNode node) {
+        if (node == null) {
+            return 0.0;
+        }
+        
+        double totalTime = 0.0;
+        
+        // 统计当前节点的SQL执行时间
+        if (node.getContainSQL() != null && node.getContainSQL() && node.getSqlModelList() != null) {
+            for (DBModel dbModel : node.getSqlModelList()) {
+                if (dbModel.getExecTime() != null && dbModel.getDataQueryNum() != null) {
+                    totalTime += dbModel.getExecTime() * dbModel.getDataQueryNum();
+                } else if (dbModel.getExecTime() != null) {
+                    totalTime += dbModel.getExecTime();
+                }
+            }
+        }
+        
+        // 递归统计子节点的执行时间
+        if (node.getSubNodes() != null && !node.getSubNodes().isEmpty()) {
+            for (TraceChainNode subNode : node.getSubNodes()) {
+                totalTime += calculateTotalExecTime(subNode);
+            }
+        }
+        
+        return totalTime;
+    }
 
 
     /**
@@ -378,6 +495,7 @@ public class TransactionUtils {
             svcExternalMetricsRes.setLanguage(strings[0]);
             svcExternalMetricsRes.setServiceName(strings[1]);
             svcExternalMetricsRes.setPodName(strings[2]);
+            svcExternalMetricsRes.setCollector(ManagementFactory.getRuntimeMXBean().getName());
             //记录请求数量
             svcExternalMetricsRes.setRequestCount(latencyList.size());
             Integer failReqCount = serverFailRequestMap.get(uniqueNote) ==null?0:serverFailRequestMap.get(uniqueNote);

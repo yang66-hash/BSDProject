@@ -68,15 +68,21 @@ public class CircularDependencyDetectionService {
                 traceResult.put("interval", trace.getInterval());
                 traceResult.put("traceId", trace.getRequestChain() != null ? trace.getRequestChain().getTraceId() : "unknown");
                 
+                // 添加链路统计信息
+                traceResult.put("chainDepth", trace.getChainDepth() != null ? trace.getChainDepth() : 0);
+                traceResult.put("sqlCount", trace.getSqlCount() != null ? trace.getSqlCount() : 0);
+                traceResult.put("totalExecTime", trace.getTotalExecTime() != null ? trace.getTotalExecTime() : 0.0);
+                
                 if (hasCircularDependency(trace)) {
                     anomalousTraces.add(trace);
                     circularDependencyCount++;
                     traceResult.put("hasCircularDependency", true);
                     traceResult.put("circularPaths", extractCircularPaths(trace));
                     
-                    log.warn("检测到循环依赖 - 服务: {}, Pod: {}, TraceId: {}",
+                    log.warn("检测到循环依赖 - 服务: {}, Pod: {}, TraceId: {}, 链路深度: {}, SQL次数: {}, 总执行时间: {}μs",
                         trace.getServiceName(), trace.getPodName(),
-                        trace.getRequestChain() != null ? trace.getRequestChain().getTraceId() : "unknown");
+                        trace.getRequestChain() != null ? trace.getRequestChain().getTraceId() : "unknown",
+                        trace.getChainDepth(), trace.getSqlCount(), trace.getTotalExecTime());
                 } else {
                     traceResult.put("hasCircularDependency", false);
                 }

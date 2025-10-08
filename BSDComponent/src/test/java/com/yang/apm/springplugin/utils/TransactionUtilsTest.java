@@ -44,7 +44,7 @@ class TransactionUtilsTest {
     public void testTrace2() throws ParseException, IOException {
         String endTimeString = "2025-09-12 15:43:43";
         Integer interval = 300;
-        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Date endTime = dateTimeFormatter.parse(endTimeString);
         Date startTime = TimeUtil.calculateStartTime(endTime, interval);
         log.info("fetching traces from {} to {}",startTime,endTime);

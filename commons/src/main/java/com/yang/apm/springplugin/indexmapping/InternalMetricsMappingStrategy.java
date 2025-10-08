@@ -13,9 +13,10 @@ public class InternalMetricsMappingStrategy implements IndexMappingStrategy{
                 //对于复杂嵌套结构，开启动态映射但保持关键字段的类型定义
                 .dynamic(DynamicMapping.True)
                 // SvcRes 基础字段
-                .properties("startTime",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
-                .properties("endTime",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
+                .properties("startTime",p->p.date(d->d.format("strict_date_time")))
+                .properties("endTime",p->p.date(d->d.format("strict_date_time")))
                 .properties("interval",p->p.keyword(k->k))
+                .properties("collector",p->p.keyword(k->k))
                 .properties("language",p->p.keyword(k->k))
                 .properties("serviceName",p->p.keyword(k->k))
                 .properties("podName",p->p.keyword(k->k))

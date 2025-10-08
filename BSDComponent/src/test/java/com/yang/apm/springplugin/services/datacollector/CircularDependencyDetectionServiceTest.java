@@ -32,7 +32,7 @@ class CircularDependencyDetectionServiceTest {
   public void detectCircularDependencyAsync() throws ParseException, IOException {
     String endTimeString = "2025-09-12 15:43:43";
     Integer interval = 300;
-    SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     Date endTime = dateTimeFormatter.parse(endTimeString);
     Date startTime = TimeUtil.calculateStartTime(endTime, interval);
     log.info("fetching traces from {} to {}",startTime,endTime);
@@ -65,6 +65,62 @@ class CircularDependencyDetectionServiceTest {
     log.info("SvcTransRes List JSON: {}", jsonOutput);
 
     circularDependencyDetectionService.detectCircularDependencyAsync(stringListMap,endTime,startTime,interval);
+  }
+
+  /**
+   * 测试链路统计功能
+   */
+  @Test
+  public void testChainMetricsCalculation() throws ParseException, IOException {
+    String endTimeString = "2025-09-12 15:43:43";
+    Integer interval = 300;
+    SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    Date endTime = dateTimeFormatter.parse(endTimeString);
+    Date startTime = TimeUtil.calculateStartTime(endTime, interval);
+    log.info("测试链路统计功能 - 获取时间范围: {} 到 {}", startTime, endTime);
+
+    Query rangeQuery = ElasticSearchQueryUtil.createTimeRangeQuery("@timestamp", startTime, endTime);
+
+    SearchRequest request = new SearchRequest.Builder()
+        .index(".ds-traces-apm*")
+        .query(rangeQuery).timeout("10s")
+        .size(100) // 减少数据量用于测试
+        .sort(sort-> sort.field(f-> f.field("@timestamp").order(SortOrder.Asc)))
+        .build();
+    List<TraceServiceInfo> traceServiceInfoList = esQueryService.executeSearch(request, TraceServiceInfo.class);
+
+    log.info("收集到的traces条数: {}", traceServiceInfoList.size());
+    
+    if (traceServiceInfoList.isEmpty()) {
+      log.warn("没有找到测试数据，跳过统计功能测试");
+      return;
+    }
+
+    // 解析数据并分析链路
+    Map<String, List<TraceServiceInfo>> stringListMap = TransactionUtils.parseData2TraceMap(traceServiceInfoList);
+    List<SvcTransRes> list = TransactionUtils.analyzeTransaction4Trace(stringListMap, endTime, startTime, interval);
+
+    log.info("分析得到的链路数量: {}", list.size());
+
+    // 验证统计功能
+    for (SvcTransRes svcTransRes : list) {
+      log.info("=== 链路统计信息 ===");
+      log.info("服务名: {}", svcTransRes.getServiceName());
+      log.info("Pod名: {}", svcTransRes.getPodName());
+      log.info("链路深度: {}", svcTransRes.getChainDepth());
+      log.info("SQL请求次数: {}", svcTransRes.getSqlCount());
+      log.info("总执行时间: {} μs", svcTransRes.getTotalExecTime());
+      log.info("TraceId: {}", svcTransRes.getRequestChain() != null ? svcTransRes.getRequestChain().getTraceId() : "unknown");
+      
+      // 验证数据合理性
+      assert svcTransRes.getChainDepth() != null && svcTransRes.getChainDepth() >= 0 : "链路深度应该 >= 0";
+      assert svcTransRes.getSqlCount() != null && svcTransRes.getSqlCount() >= 0 : "SQL次数应该 >= 0";
+      assert svcTransRes.getTotalExecTime() != null && svcTransRes.getTotalExecTime() >= 0.0 : "总执行时间应该 >= 0";
+      
+      log.info("=== 统计信息验证通过 ===");
+    }
+
+    log.info("链路统计功能测试完成，共验证了 {} 条链路", list.size());
   }
 
 }

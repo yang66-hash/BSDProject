@@ -108,7 +108,7 @@ public class ScheduledService {
             String businessMetricsIndex = IndexUtil.getBusinessMetricsIndex(intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY));
             scheduledTimeIncr();
             int interval = intervalWindowMappingService.getValueByName(ConstantUtil.INTERVAL_OF_DYNAMIC_KEY);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             Date date = new Date();
 
             String formatTime = simpleDateFormat.format(date);

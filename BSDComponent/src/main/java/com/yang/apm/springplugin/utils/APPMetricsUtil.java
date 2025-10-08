@@ -10,6 +10,7 @@ import com.yang.apm.springplugin.pojo.result.jvm.JVMSummaryRes;
 import com.yang.apm.springplugin.pojo.result.jvm.SvcMetricsRes;
 import com.yang.apm.springplugin.pojo.system.Service;
 
+import java.lang.management.ManagementFactory;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -178,6 +179,7 @@ public class APPMetricsUtil {
         svcMetricsRes.setStartTime(startTime);
         svcMetricsRes.setInterval(interval);
         svcMetricsRes.setEndTime(endTime);
+        svcMetricsRes.setCollector(ManagementFactory.getRuntimeMXBean().getName());
         return svcMetricsRes;
     }
 }

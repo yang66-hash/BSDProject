@@ -9,16 +9,11 @@ import com.yang.apm.springplugin.services.dynamicdetect.UnevenLoadDistributionSe
 import com.yang.apm.springplugin.services.dynamicdetect.InconsistentServiceResponseService;
 import com.yang.apm.springplugin.services.dynamicdetect.CallRateAnomalyService;
 import com.yang.apm.springplugin.services.dynamicdetect.UnevenApiUsageService;
-import com.yang.apm.springplugin.services.dynamicdetect.ChattyServiceService;
-import com.yang.apm.springplugin.services.dynamicdetect.ServiceChainService;
 import com.yang.apm.springplugin.services.dynamicdetect.HighFreSlowQueriesService;
-import com.yang.apm.springplugin.services.dynamicdetect.N1QueriesService;
 import com.yang.apm.springplugin.services.dynamicdetect.FrequentGcService;
 import com.yang.apm.springplugin.services.dynamicdetect.LongTimeGcService;
 import com.yang.apm.springplugin.services.dynamicdetect.MemJitterService;
 import com.yang.apm.springplugin.services.dynamicdetect.UnevenLogicProService;
-import com.yang.apm.springplugin.services.dynamicdetect.FallingDominoesService;
-import com.yang.apm.springplugin.services.dynamicdetect.UnnecessaryProService;
 import com.yang.apm.springplugin.services.dynamicdetect.TheRampService;
 import com.yang.apm.springplugin.model.ResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,8 +40,6 @@ public class DynamicController {
     @Autowired
     private InconsistentServiceResponseService inconsistentServiceResponseService;
 
-//    @Autowired
-//    private ResourceWasteService resourceWasteService;
 
     @Autowired
     private CallRateAnomalyService callRateAnomalyService;
@@ -55,16 +48,8 @@ public class DynamicController {
     private UnevenApiUsageService unevenApiUsageService;
 
     @Autowired
-    private ChattyServiceService chattyServiceService;
-
-    @Autowired
-    private ServiceChainService serviceChainService;
-
-    @Autowired
     private HighFreSlowQueriesService highFreSlowQueriesService;
 
-    @Autowired
-    private N1QueriesService n1QueriesService;
 
     @Autowired
     private FrequentGcService frequentGcService;
@@ -77,12 +62,6 @@ public class DynamicController {
 
     @Autowired
     private UnevenLogicProService unevenLogicProService;
-
-    @Autowired
-    private FallingDominoesService fallingDominoesService;
-
-    @Autowired
-    private UnnecessaryProService unnecessaryProService;
 
     @Autowired
     private TheRampService theRampService;
@@ -135,20 +114,6 @@ public class DynamicController {
         //从es中拉取历史数据和当前数据作分析
         return ResponseDTO.success("Detect command reached.");
     }
-
-//    @RequestMapping(path = "/resource-waste",
-//        method = RequestMethod.POST,
-//        produces = "application/json; charset=UTF-8",
-//        consumes = {"text/plain", "application/*"})
-//    @Operation(description = "检测运行时态下异味————Resource Waste")
-//    public ResponseDTO<String> resourceWaste(@RequestBody RequestItem requestItem){
-//
-//        DetectionResItem detectionResItem = resourceWasteService.resourceWasteDetect(requestItem);
-//        log.info("resource waste detection finished for " + requestItem.getServiceName());
-//        detectionItemBufferService.addResItem(detectionResItem);
-//        //从es中拉取历史数据和当前数据作分析
-//        return ResponseDTO.success("Detect command reached.");
-//    }
 
     @RequestMapping(path = "/call-rate-anomaly",
         method = RequestMethod.POST,
@@ -283,6 +248,8 @@ public class DynamicController {
         //从es中拉取历史数据和当前数据作分析
         return ResponseDTO.success("Detect command reached.");
     }
+
+
 
 
 }

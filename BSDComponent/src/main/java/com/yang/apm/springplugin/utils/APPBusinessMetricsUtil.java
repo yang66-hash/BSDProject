@@ -4,6 +4,7 @@ import com.yang.apm.springplugin.pojo.metrics.business.SpringBusinessInfo;
 import com.yang.apm.springplugin.pojo.result.business.BusinessMetricsRes;
 import com.yang.apm.springplugin.pojo.system.Service;
 
+import java.lang.management.ManagementFactory;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,7 @@ public class APPBusinessMetricsUtil {
         businessMetricsRes.setStartTime(startTime);
         businessMetricsRes.setInterval(interval);
         businessMetricsRes.setEndTime(endTime);
+        businessMetricsRes.setCollector(ManagementFactory.getRuntimeMXBean().getName());
         return businessMetricsRes;
 
     }

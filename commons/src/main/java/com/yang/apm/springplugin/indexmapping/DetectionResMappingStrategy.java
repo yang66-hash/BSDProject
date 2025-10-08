@@ -12,10 +12,10 @@ public class DetectionResMappingStrategy implements IndexMappingStrategy{
         return mappings -> mappings
                 //设置无需动态推断字段类型
                 .dynamic(DynamicMapping.False)
-                .properties("timestamp",p->p.date(d->d.format("yyyy-MM-dd HH:mm:ss")))
+            .properties("timestamp",p->p.date(d->d.format("strict_date_time")))
                 .properties("status",p->p.boolean_(b->b))
                 .properties("detectionID",p->p.keyword(k->k))
-                .properties("detector",p->p.text(k->k))
+                .properties("detector",p->p.keyword(k->k))
                 .properties("name",p->p.keyword(k->k))
                 .properties("categoryName",p->p.keyword(k->k))
                 .properties("typeName",p->p.keyword(k->k))
