@@ -143,13 +143,13 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    public ResponseDTO<String> chattyService(@RequestBody RequestItem requestItem){
-        return ResponseDTO.success("No detection provided.");
-    }
-
-    public ResponseDTO<String> serviceChain(@RequestBody RequestItem requestItem){
-        return ResponseDTO.success("No detection provided.");
-    }
+//    public ResponseDTO<String> chattyService(@RequestBody RequestItem requestItem){
+//        return ResponseDTO.success("No detection provided.");
+//    }
+//
+//    public ResponseDTO<String> serviceChain(@RequestBody RequestItem requestItem){
+//        return ResponseDTO.success("No detection provided.");
+//    }
 
 
     @RequestMapping(path = "/high-frequency-of-slow-queries",
@@ -166,9 +166,9 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    public ResponseDTO<String> n1Queries(@RequestBody RequestItem requestItem){
-        return ResponseDTO.success("No detection provided.");
-    }
+//    public ResponseDTO<String> n1Queries(@RequestBody RequestItem requestItem){
+//        return ResponseDTO.success("No detection provided.");
+//    }
 
 
     @RequestMapping(path = "/frequent-gc",
@@ -227,13 +227,13 @@ public class DynamicController {
         return ResponseDTO.success("Detect command reached.");
     }
 
-    public ResponseDTO<String> fallingDominoes(@RequestBody RequestItem requestItem){
-        return ResponseDTO.success("No detection provided.");
-    }
-
-    public ResponseDTO<String> unnecessaryProcessing(@RequestBody RequestItem requestItem){
-        return ResponseDTO.success("No detection provided.");
-    }
+//    public ResponseDTO<String> fallingDominoes(@RequestBody RequestItem requestItem){
+//        return ResponseDTO.success("No detection provided.");
+//    }
+//
+//    public ResponseDTO<String> unnecessaryProcessing(@RequestBody RequestItem requestItem){
+//        return ResponseDTO.success("No detection provided.");
+//    }
 
     @RequestMapping(path = "/the-ramp",
         method = RequestMethod.POST,

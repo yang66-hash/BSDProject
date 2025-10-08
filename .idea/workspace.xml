@@ -4,31 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="部分修改">
+    <list default="true" id="d64780cf-3236-45a5-b539-e4664572eaad" name="Changes" comment="add README.md">
+      <change afterPath="$PROJECT_DIR$/docs/db/data_collector_db.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/README_CN.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/docs/UnevenLoadDistribution算法说明.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSDComponent/docs/不均衡负载检测使用示例.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/UNEVEN_LOAD_DISTRIBUTION.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BusinessMetricsDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datademo/BusinessMetricsDemo.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CallRateAnomalyDetection.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/CallRateAnomalyDetection.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FINAL_COMPLETE_API_LIST.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/FINAL_COMPLETE_API_LIST.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frequent_GC_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Frequent_GC_Detection_Implementation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/High_Frequency_Slow_Queries_Cache_Based_Detection.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/High_Frequency_Slow_Queries_Cache_Based_Detection.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Instance_Based_Slow_Query_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Instance_Based_Slow_Query_Detection_Implementation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Long_Time_GC_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Long_Time_GC_Detection_Implementation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Memory_Jitter_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Memory_Jitter_Detection_Implementation.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/java/com/yang/apm/springplugin/controller/dynamicanalysis/DynamicController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSDComponent/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/BSDComponent/src/main/resources/application-dev.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQL_Fingerprint_Enhancement.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/SQL_Fingerprint_Enhancement.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SvcMetricsResDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datademo/SvcMetricsResDemo.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/The_Ramp_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/The_Ramp_Detection_Implementation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnevenApiUsageDetection.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/UnevenApiUsageDetection.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Uneven_Logic_Processing_Detection_Implementation.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/Uneven_Logic_Processing_Detection_Implementation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/architecture.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/img/architecture.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cycleDependencyDemo.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datademo/cycleDependencyDemo.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/error.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid6396.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/当前插件支持类型.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/当前插件支持类型.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/cn/当前插件支持类型.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/cn/当前插件支持类型.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,10 +152,10 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\javaworkplace\BSDProject\docs\cn" />
+      <recent name="E:\javaworkplace\BSDProject\docs\db" />
       <recent name="E:\javaworkplace\BSDProject\docs\datademo" />
       <recent name="E:\javaworkplace\BSDProject\docs" />
       <recent name="E:\javaworkplace\BSDProject\docs\img" />
-      <recent name="E:\javaworkplace\BSDProject\DataCollector\src\main\resources" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -415,7 +397,7 @@
       <workItem from="1759755155376" duration="3744000" />
       <workItem from="1759805425446" duration="3427000" />
       <workItem from="1759822420193" duration="7934000" />
-      <workItem from="1759890800188" duration="1538000" />
+      <workItem from="1759890800188" duration="7253000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <option name="closed" value="true" />
@@ -617,7 +599,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759890859079</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="add README.md">
+      <option name="closed" value="true" />
+      <created>1759892719790</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1759892719791</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -657,7 +647,8 @@
     <MESSAGE value="关闭不再提供检测的接口" />
     <MESSAGE value="上传readme" />
     <MESSAGE value="部分修改" />
-    <option name="LAST_COMMIT_MESSAGE" value="部分修改" />
+    <MESSAGE value="add README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="add README.md" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
